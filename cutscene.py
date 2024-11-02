@@ -20,15 +20,14 @@ class Cutscene:
                 if event.type == pygame.QUIT:
                     self.is_active = False
                     return "exit"
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        self.dialogue.skip()
+                elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                    self.dialogue.skip()
             self.dialogue.update()
             self.draw(screen)
             pygame.display.flip()
             if not self.dialogue.is_active:
                 self.is_active = False
-            clock.tick(2)
+            clock.tick(60)
         return "continue"
 
     def draw(self, screen):
