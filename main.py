@@ -1,194 +1,123 @@
 # main.py
+
 import pygame
 from settings import *
 from duck import Duck
-from level import FlowerField, CitySewer, PollutedRiver
+from level import Level
 from game_menu import Menu
-from cutscene1 import Cutscene1
-from cutscene2 import Cutscene2
-from cutscene3 import Cutscene3
-from cutscene1A import Cutscene1A
-from cutscene2A import Cutscene2A
-from cutscene3A import Cutscene3A
+from cutscene import Cutscene
 
 def main():
     pygame.init()
     pygame.mixer.init()
     pygame.mixer.music.load(MENU_MUSIC)
+    pygame.mixer.music.set_volume(1.0)
     pygame.mixer.music.play(-1)
-    pygame.joystick.init()
-    pygame.font.init()  # Initialize font module
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("P Ducky")
     clock = pygame.time.Clock()
 
-
-    joystick = None
-
-    if pygame.joystick.get_count() > 0:
-        joystick = pygame.joystick.Joystick(0)
-        joystick.init()
-        print(f"Joystick detected: {joystick.get_name()}")
-        print(f"Number of axes: {joystick.get_numaxes()}")
-        print(f"Number of buttons: {joystick.get_numbuttons()}")
-        print(f"Number of hats: {joystick.get_numhats()}")
-    else:
-        print("No joystick detected.")
-
-
-    # Initialize game components
     menu = Menu()
+    if menu.run(screen) == "exit":
+        pygame.quit()
+        return
+
+    levels = [create_level(idx) for idx in range(3)]
+    cutscenes = [create_cutscene(idx) for idx in range(3)]
     duck = Duck(100, 500)
-    levels = [FlowerField(), CitySewer(), PollutedRiver()]
-    cutscenes = [Cutscene1(),Cutscene1A(), Cutscene2(),Cutscene2A(), Cutscene3(),Cutscene3A()]
+    current_level_idx = 0
 
-    current_level_index = 0
-    current_level = levels[current_level_index]
-    dialogue = None
-
-    # Camera offset
-    camera_x = 0
-
-    # Game states
-    running = True
-    playing = False
-
-    # Menu loop
-    action = menu.run(screen)
-    if action == "exit":
-        running = False
-    else:
-        # Run cutscene before starting the game
-                cutscene_action = cutscenes[0].run(screen)
-                if cutscene_action == "exit":
-                    running = False
-                else:
-                    playing = True 
-        
-
-    
-    # Main game loop
-    while running:
-        if playing:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-
-                # Handle keyboard input
-                if event.type == pygame.KEYDOWN:
-                    if event.key == KEY_LEFT:
-                        duck.move_left()
-                    if event.key == KEY_RIGHT:
-                        duck.move_right()
-                    if event.key == KEY_JUMP:
-                        duck.jump_pressed = True
-                    if event.key == pygame.K_SPACE and dialogue and dialogue.is_active:
-                        dialogue.skip()
-                if event.type == pygame.KEYUP:
-                    if event.key == KEY_LEFT:
-                        duck.stop_moving_left()
-                    if event.key == KEY_RIGHT:
-                        duck.stop_moving_right()
-                    if event.key == KEY_JUMP:
-                        duck.jump_pressed = False
-
-                # Handle joystick button events for debugging
-                if event.type == pygame.JOYBUTTONDOWN:
-                    print(f"Joystick button {event.button} down")
-                if event.type == pygame.JOYBUTTONUP:
-                    print(f"Joystick button {event.button} up")
-
-            # Poll joystick input
-            if joystick:
-                num_buttons = joystick.get_numbuttons()
-                buttons = [joystick.get_button(i) for i in range(num_buttons)]
-                # Reset horizontal movement
-                # duck.stop()
-                axis_x = joystick.get_axis(0)
-                axis_y = joystick.get_axis(1)
-                if axis_x < -0.1:
-                    duck.move_left()
-                elif axis_x > 0.1:
-                    duck.move_right()
-                else:
-                    duck.stop()
-
-
-                # if buttons[1]:  # Adjust indices based on your testing
-                #     duck.move_right()
-                # if buttons[3]:
-                #     duck.move_left()
-                # # Update jump_pressed state
-                duck.jump_pressed = buttons[0]
-                if any(buttons):
-                    if dialogue and dialogue.is_active:
-                        dialogue.skip()
-
-            # Update game objects
-            duck.update(current_level.platforms.sprites())
-            if dialogue and dialogue.is_active:
-                dialogue.update()
-            current_level.update(duck)
-
-            # Update camera position
-            camera_x = duck.rect.x - SCREEN_WIDTH // 2
-            if camera_x < 0:
-                camera_x = 0
-            elif camera_x > current_level.level_width - SCREEN_WIDTH:
-                camera_x = current_level.level_width - SCREEN_WIDTH
-
-            # Prevent duck from moving beyond level boundaries
-            if duck.rect.x < 0:
-                duck.rect.x = 0
-            elif duck.rect.x > current_level.level_width - duck.rect.width:
-                duck.rect.x = current_level.level_width - duck.rect.width
-
-            # Drawing
-            current_level.draw(screen, camera_x)
-            duck.draw(screen, camera_x)
-            if dialogue and dialogue.is_active:
-                dialogue.draw(screen)
-            pygame.display.flip()
-
-            # Check for level completion
-            if duck.rect.x >= current_level.level_width - duck.rect.width:
-                # Level completed
-                # Run post-level cutscenes
-                cutscene_idx = current_level_index * 2
-                if cutscene_idx < len(cutscenes):
-                    # Play the cutscene of the previous duck
-                    cutscene_action = cutscenes[cutscene_idx].run(screen)
-                    
-                    
-                    if cutscene_action == "exit":
-                        running = False
-                        return
-                    # Immediately proceed to the next cutscene (if any)
-                    if cutscene_idx + 1 < len(cutscenes):
-                        cutscene_action = cutscenes[cutscene_idx + 1].run(screen)
-                        if cutscene_action == "exit":
-                            running = False
-                            return
-
-                # Prepare for next level
-                current_level_index += 1
-                if current_level_index < len(levels):
-                    current_level = levels[current_level_index]
-                    duck.rect.x = 100
-                    duck.rect.y = 500
-                    dialogue = None  # Reset dialogue for the new level if needed
-                    playing = True
-                else:
-                    # End of the game
-                    playing = False
-                    # Display end scene or credits
-
-            clock.tick(FPS)
-        else:
-            # Show end scene or return to menu
-            running = False
+    while current_level_idx < len(levels):
+        duck.rect.x = 100  # Reset duck position
+        duck.rect.y = 500
+        level = levels[current_level_idx]
+        cutscene = cutscenes[current_level_idx]
+        if cutscene.run(screen) == "exit":
+            break
+        if not play_level(screen, duck, level, clock):
+            break
+        current_level_idx += 1
 
     pygame.quit()
+
+def play_level(screen, duck, level, clock):
+    camera_x = 0
+    running = True
+    while running:
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == KEY_LEFT:
+                    duck.move(-1)
+                elif event.key == KEY_RIGHT:
+                    duck.move(1)
+                elif event.key == KEY_JUMP:
+                    duck.jump()
+                elif event.key == pygame.K_ESCAPE:
+                    return False
+            elif event.type == pygame.KEYUP:
+                if event.key in (KEY_LEFT, KEY_RIGHT):
+                    duck.stop()
+
+        duck.update(level.platforms)
+        level.update()
+        camera_x = max(0, min(duck.rect.x - SCREEN_WIDTH // 2, level.level_width - SCREEN_WIDTH))
+        level.draw(screen, camera_x)
+        duck.draw(screen, camera_x)
+        pygame.display.flip()
+
+        # Check if duck fell below the ground
+        if duck.rect.y > SCREEN_HEIGHT:
+            # Reset duck position
+            duck.rect.x = 100
+            duck.rect.y = 500
+
+        if duck.rect.x >= level.level_width - duck.rect.width:
+            return True
+    return False
+
+def create_level(index):
+    platform_data = [
+        # Level 1: Flower Field
+        [
+            {'x': 300, 'y': 500, 'width': 100, 'height': 20, 'image': OBSTACLE_IMAGE},
+            {'x': 500, 'y': 450, 'width': 100, 'height': 20, 'image': OBSTACLE_IMAGE},
+            {'x': 700, 'y': 400, 'width': 100, 'height': 20, 'image': OBSTACLE_IMAGE, 'moving': True, 'move_range': 200, 'speed': 2},
+            {'x': 1000, 'y': 350, 'width': 100, 'height': 20, 'image': OBSTACLE_IMAGE},
+            {'x': 1200, 'y': 300, 'width': 100, 'height': 20, 'image': OBSTACLE_IMAGE},
+            {'x': 1400, 'y': 250, 'width': 100, 'height': 20, 'image': OBSTACLE_IMAGE},
+        ],
+        # Level 2: City Sewer
+        [
+            {'x': 300, 'y': 500, 'width': 150, 'height': 20, 'image': OBSTACLE_IMAGE},
+            {'x': 600, 'y': 450, 'width': 150, 'height': 20, 'image': OBSTACLE_IMAGE},
+            {'x': 900, 'y': 400, 'width': 150, 'height': 20, 'image': OBSTACLE_IMAGE},
+            {'x': 1200, 'y': 350, 'width': 150, 'height': 20, 'image': OBSTACLE_IMAGE, 'moving': True, 'move_range': 300, 'speed': 3},
+            {'x': 1600, 'y': 300, 'width': 150, 'height': 20, 'image': OBSTACLE_IMAGE},
+            {'x': 1900, 'y': 250, 'width': 150, 'height': 20, 'image': OBSTACLE_IMAGE},
+        ],
+        # Level 3: Polluted River
+        [
+            {'x': 300, 'y': 500, 'width': 200, 'height': 20, 'image': OBSTACLE_IMAGE},
+            {'x': 700, 'y': 450, 'width': 200, 'height': 20, 'image': OBSTACLE_IMAGE, 'moving': True, 'move_range': 400, 'speed': 4},
+            {'x': 1100, 'y': 400, 'width': 200, 'height': 20, 'image': OBSTACLE_IMAGE},
+            {'x': 1500, 'y': 350, 'width': 200, 'height': 20, 'image': OBSTACLE_IMAGE},
+            {'x': 1900, 'y': 300, 'width': 200, 'height': 20, 'image': OBSTACLE_IMAGE},
+            {'x': 2300, 'y': 250, 'width': 200, 'height': 20, 'image': OBSTACLE_IMAGE},
+        ]
+    ]
+    ground_level = 550  # Y-coordinate of the ground
+    return Level(BACKGROUND_IMAGES[index], platform_data[index], ground_level)
+
+def create_cutscene(index):
+    characters = [
+        [{'image': DUCK_IMAGE, 'position': (350, 400), 'size': (100, 100)}],
+        [{'image': DUCK_IMAGE, 'position': (350, 400), 'size': (100, 100)}],
+        [{'image': DUCK_IMAGE, 'position': (350, 400), 'size': (100, 100)}]
+    ]
+    return Cutscene(CUTSCENE_BACKGROUNDS[index], characters[index], CUTSCENE_DIALOGUES[index])
 
 if __name__ == "__main__":
     main()
