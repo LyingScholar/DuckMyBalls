@@ -2,19 +2,26 @@
 import pygame
 from settings import *
 from duck import Duck
-from dialogue import Dialogue
 from level import FlowerField, CitySewer, PollutedRiver
 from game_menu import Menu
 from cutscene import Cutscene
-from cutscene2 import Cutscene2
+from cutscene2 import cutscene2
 
 def main():
     pygame.init()
+    pygame.joystick.init()
     pygame.font.init()  # Initialize font module
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("P Ducky")
     clock = pygame.time.Clock()
 
+    joystick = None
+    if pygame.joystick.get_count() > 0:
+        joystick = pygame.joystick.Joystick(0)
+        joystick.init()
+        print(f"Joystick detected: {joystick.get_name()}")
+    else:
+        print("No joystick detected.")
     # Initialize game components
     menu = Menu()
     cutscene = Cutscene()
@@ -49,6 +56,8 @@ def main():
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
+
+                # Handle keyboard input
                 if event.type == pygame.KEYDOWN:
                     if event.key == KEY_LEFT:
                         duck.move_left()
@@ -61,6 +70,38 @@ def main():
                 if event.type == pygame.KEYUP:
                     if event.key == KEY_LEFT or event.key == KEY_RIGHT:
                         duck.stop()
+
+                # Handle joystick input
+                if event.type == pygame.JOYBUTTONDOWN:
+                    if event.joy == joystick.get_id():
+                        if event.button == 1:  # Button 1 on controller
+                            duck.move_right()
+                        if event.button == 0:  # Button 2 on controller
+                            duck.jump()
+                        if event.button == 3:  # Button 3 on controller
+                            duck.move_left()
+                        if dialogue and dialogue.is_active:
+                            dialogue.skip()
+                if event.type == pygame.JOYBUTTONUP:
+                    if event.joy == joystick.get_id():
+                        if event.button == 0 or event.button == 2:
+                            duck.stop()
+            if joystick:
+            # Check buttons
+                buttons = joystick.get_button()
+                # Reset movement
+                duck.stop()
+                if buttons[0]:  # Button 1 pressed
+                    duck.move_right()
+                if buttons[2]:  # Button 3 pressed
+                    duck.move_left()
+                if buttons[1]:  # Button 2 pressed
+                    duck.jump()
+                # Handle dialogue skipping
+                if buttons[0] or buttons[1] or buttons[2]:
+                    if dialogue and dialogue.is_active:
+                        dialogue.skip()
+
 
             # Update game objects
             duck.update(current_level.platforms.sprites() + current_level.ground.sprites())

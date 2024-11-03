@@ -1,6 +1,6 @@
 # cutscene.py
 import pygame
-from settings import SCREEN_WIDTH, SCREEN_HEIGHT, DUCK_IMAGE_CUTSCENE, DUCK_IMAGE_2, CUTSCENE_DIALOGUE_CSV, CUTSCENE_1_BG
+from settings import SCREEN_WIDTH, SCREEN_HEIGHT, DUCK_IMAGE_CUTSCENE, DUCK_IMAGE_1, CUTSCENE_DIALOGUE_CSV, CUTSCENE_1_BG
 from dialogue import Dialogue
 
 class Cutscene:
@@ -8,7 +8,7 @@ class Cutscene:
         self.background = pygame.transform.scale(pygame.image.load(CUTSCENE_1_BG),(SCREEN_WIDTH,SCREEN_HEIGHT))
         
         self.duck_image = pygame.transform.scale(pygame.image.load(DUCK_IMAGE_CUTSCENE).convert_alpha(), (300, 300))
-        self.duck_2_image = pygame.transform.scale(pygame.image.load(DUCK_IMAGE_2).convert_alpha(), (100, 100))
+        self.duck_2_image = pygame.transform.scale(pygame.image.load(DUCK_IMAGE_1).convert_alpha(), (100, 100))
         self.dialogue = Dialogue(CUTSCENE_DIALOGUE_CSV)
         self.font = pygame.font.Font(None, 32)
         self.is_active = True
@@ -33,7 +33,10 @@ class Cutscene:
     def draw(self, screen):
         screen.blit(self.background, (0, 0))
         # Draw characters
-        screen.blit(self.duck_2_image, (100, 400))
-        screen.blit(self.duck_image, (300, 100))
+        screen.blit(self.other_d
+                    uck_image, (100, 400))
+        screen.blit(self.main_duck_image, (200, 400))
         # Draw dialogue
+        
         self.dialogue.draw(screen)
+
