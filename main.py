@@ -18,7 +18,12 @@ def main():
     clock = pygame.time.Clock()
 
     menu = Menu()
-    if menu.run(screen) == "exit":
+    result = menu.run(screen)
+    if result == "exit":
+        pygame.quit()
+        return
+    elif result != "start":
+        # If the menu didn't return 'start', exit the game
         pygame.quit()
         return
 
@@ -32,7 +37,8 @@ def main():
         duck.rect.y = 500
         level = levels[current_level_idx]
         cutscene = cutscenes[current_level_idx]
-        if cutscene.run(screen) == "exit":
+        result = cutscene.run(screen)
+        if result == "exit":
             break
         if not play_level(screen, duck, level, clock):
             break
@@ -56,6 +62,7 @@ def play_level(screen, duck, level, clock):
                 elif event.key == KEY_JUMP:
                     duck.jump()
                 elif event.key == pygame.K_ESCAPE:
+                    # Return to main menu on ESC
                     return False
             elif event.type == pygame.KEYUP:
                 if event.key in (KEY_LEFT, KEY_RIGHT):

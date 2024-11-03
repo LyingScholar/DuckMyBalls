@@ -14,6 +14,7 @@ class Platform(pygame.sprite.Sprite):
         self.speed = speed
         self.initial_x = x
         self.direction = 1
+        self.level_width = width
 
     def update(self):
         if self.moving:
@@ -37,7 +38,7 @@ class Level:
         ground = Platform(
             x=0,
             y=self.ground_level,
-            width=self.level_width,
+            width=max(p.rect.right for p in self.platforms),
             height=SCREEN_HEIGHT - self.ground_level,
             image=GROUND_IMAGE
         )

@@ -3,7 +3,6 @@
 import pygame
 import os
 from settings import *
-
 class Menu:
     def __init__(self):
         self.background = pygame.transform.scale(
@@ -42,18 +41,29 @@ class Menu:
                     elif event.key == pygame.K_DOWN:
                         self.selected_option = (self.selected_option + 1) % len(self.options)
                     elif event.key == pygame.K_RETURN:
-                        return self.execute_option(screen)
+                        result = self.execute_option(screen)
+                        if result == "exit" or result == "start":
+                            return result
+                    elif event.key == pygame.K_ESCAPE:
+                        # Exit the game if ESC is pressed in the main menu
+                        return "exit"
             clock.tick(FPS)
 
     def execute_option(self, screen):
         if self.options[self.selected_option] == "Start Game":
             return "start"
         elif self.options[self.selected_option] == "Audio Settings":
-            self.audio_settings(screen)
+            result = self.audio_settings(screen)
+            if result == "exit":
+                return "exit"
         elif self.options[self.selected_option] == "Instructions":
-            self.show_instructions(screen)
+            result = self.show_instructions(screen)
+            if result == "exit":
+                return "exit"
         elif self.options[self.selected_option] == "Credits":
-            self.show_credits(screen)
+            result = self.show_credits(screen)
+            if result == "exit":
+                return "exit"
         elif self.options[self.selected_option] == "Exit":
             return "exit"
 
@@ -96,6 +106,10 @@ class Menu:
                             self.sfx_volume = min(1.0, self.sfx_volume + 0.1)
                     elif event.key == pygame.K_RETURN and selected == 2:
                         return
+                    elif event.key == pygame.K_ESCAPE:
+                        # Return to main menu on ESC
+                        return
+            pygame.time.Clock().tick(FPS)
 
     def show_instructions(self, screen):
         instructions = [
@@ -105,7 +119,9 @@ class Menu:
             "- Reach the end of each level.",
             "- Press 'Esc' to return."
         ]
-        self.display_text_screen(screen, instructions)
+        result = self.display_text_screen(screen, instructions)
+        if result == "exit":
+            return "exit"
 
     def show_credits(self, screen):
         credits = [
@@ -116,7 +132,9 @@ class Menu:
             "Special Thanks: Noah and Lu",
             "Press 'Esc' to return."
         ]
-        self.display_text_screen(screen, credits)
+        result = self.display_text_screen(screen, credits)
+        if result == "exit":
+            return "exit"
 
     def display_text_screen(self, screen, lines):
         while True:
@@ -129,6 +147,8 @@ class Menu:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return "exit"
-                elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    return
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        # Return to main menu on ESC
+                        return
             pygame.time.Clock().tick(FPS)
