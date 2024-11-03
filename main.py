@@ -7,33 +7,40 @@ from game_menu import Menu
 from cutscene1 import Cutscene1
 from cutscene2 import Cutscene2
 from cutscene3 import Cutscene3
+from cutscene1A import Cutscene1A
+from cutscene2A import Cutscene2A
+from cutscene3A import Cutscene3A
 
 def main():
     pygame.init()
+    pygame.mixer.init()
+    pygame.mixer.music.load(MENU_MUSIC)
+    pygame.mixer.music.play(-1)
     pygame.joystick.init()
     pygame.font.init()  # Initialize font module
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("P Ducky")
     clock = pygame.time.Clock()
 
-    # Initialize joystick
+
     joystick = None
+
     if pygame.joystick.get_count() > 0:
         joystick = pygame.joystick.Joystick(0)
         joystick.init()
         print(f"Joystick detected: {joystick.get_name()}")
-        num_buttons = joystick.get_numbuttons()
-        print(f"Number of buttons: {num_buttons}")
-        for i in range(num_buttons):
-            print(f"Button {i}")
+        print(f"Number of axes: {joystick.get_numaxes()}")
+        print(f"Number of buttons: {joystick.get_numbuttons()}")
+        print(f"Number of hats: {joystick.get_numhats()}")
     else:
         print("No joystick detected.")
+
 
     # Initialize game components
     menu = Menu()
     duck = Duck(100, 500)
     levels = [FlowerField(), CitySewer(), PollutedRiver()]
-    cutscenes = [Cutscene1(), Cutscene2(),Cutscene3]
+    cutscenes = [Cutscene1(),Cutscene1A(), Cutscene2(),Cutscene2A(), Cutscene3(),Cutscene3A()]
 
     current_level_index = 0
     current_level = levels[current_level_index]
@@ -78,8 +85,10 @@ def main():
                     if event.key == pygame.K_SPACE and dialogue and dialogue.is_active:
                         dialogue.skip()
                 if event.type == pygame.KEYUP:
-                    if event.key == KEY_LEFT or event.key == KEY_RIGHT:
-                        duck.stop()
+                    if event.key == KEY_LEFT:
+                        duck.stop_moving_left()
+                    if event.key == KEY_RIGHT:
+                        duck.stop_moving_right()
                     if event.key == KEY_JUMP:
                         duck.jump_pressed = False
 
@@ -94,20 +103,29 @@ def main():
                 num_buttons = joystick.get_numbuttons()
                 buttons = [joystick.get_button(i) for i in range(num_buttons)]
                 # Reset horizontal movement
-                duck.stop()
-                if buttons[1]:  # Adjust indices based on your testing
-                    duck.move_right()
-                if buttons[3]:
+                # duck.stop()
+                axis_x = joystick.get_axis(0)
+                axis_y = joystick.get_axis(1)
+                if axis_x < -0.1:
                     duck.move_left()
-                # Update jump_pressed state
-                duck.jump_pressed = buttons[0]  # Assuming button 0 is the jump button
-                # Handle dialogue skipping
+                elif axis_x > 0.1:
+                    duck.move_right()
+                else:
+                    duck.stop()
+
+
+                # if buttons[1]:  # Adjust indices based on your testing
+                #     duck.move_right()
+                # if buttons[3]:
+                #     duck.move_left()
+                # # Update jump_pressed state
+                duck.jump_pressed = buttons[0]
                 if any(buttons):
                     if dialogue and dialogue.is_active:
                         dialogue.skip()
 
             # Update game objects
-            duck.update(current_level.platforms.sprites() + current_level.ground.sprites())
+            duck.update(current_level.platforms.sprites())
             if dialogue and dialogue.is_active:
                 dialogue.update()
             current_level.update(duck)
@@ -136,15 +154,18 @@ def main():
             if duck.rect.x >= current_level.level_width - duck.rect.width:
                 # Level completed
                 # Run post-level cutscenes
-                if current_level_index < len(cutscenes):
+                cutscene_idx = current_level_index * 2
+                if cutscene_idx < len(cutscenes):
                     # Play the cutscene of the previous duck
-                    cutscene_action = cutscenes[current_level_index].run(screen)
+                    cutscene_action = cutscenes[cutscene_idx].run(screen)
+                    
+                    
                     if cutscene_action == "exit":
                         running = False
                         return
                     # Immediately proceed to the next cutscene (if any)
-                    if current_level_index + 1 < len(cutscenes):
-                        cutscene_action = cutscenes[current_level_index + 1].run(screen)
+                    if cutscene_idx + 1 < len(cutscenes):
+                        cutscene_action = cutscenes[cutscene_idx + 1].run(screen)
                         if cutscene_action == "exit":
                             running = False
                             return

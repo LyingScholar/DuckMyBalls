@@ -15,23 +15,33 @@ DUCK_IMAGE_2 = os.path.join(ASSET_FOLDER, 'duck2.png')
 DUCK_IMAGE_3 = os.path.join(ASSET_FOLDER, 'duck3.png')
 
 CUTSCENE_1_BG = os.path.join(ASSET_FOLDER, 'cutscene_1_bg.jpg')
-CUTSCENE_2_BG = os.path.join(ASSET_FOLDER, 'cutscene_2_bg.jpg')
+CUTSCENE_2_BG = os.path.join(ASSET_FOLDER, 'cutscene_2_bg.png')
 CUTSCENE_3_BG = os.path.join(ASSET_FOLDER, 'cutscene_3_bg.jpg')
 
 BACKGROUND_FLOWER_FIELD = os.path.join(ASSET_FOLDER, 'background_flower_field.png')
 BACKGROUND_CITY_SEWER = os.path.join(ASSET_FOLDER, 'background_city_sewer.png')
 BACKGROUND_POLLUTED_RIVER = os.path.join(ASSET_FOLDER, 'background_polluted_river.png')
-GROUND_IMAGE = os.path.join(ASSET_FOLDER, 'ground.png')
+
+GROUND_IMAGE_1 = os.path.join(ASSET_FOLDER, 'ground_1.png')
+GROUND_IMAGE_2 = os.path.join(ASSET_FOLDER, 'ground_2.png')
+GROUND_IMAGE_3 = os.path.join(ASSET_FOLDER, 'ground_3.png')
 
 DUCK_IMAGE_CUTSCENE = os.path.join(ASSET_FOLDER, 'duck_cutscene.png')
 
 OBSTACLE_IMAGE = os.path.join(ASSET_FOLDER, 'obstacle.png')
+OBSTACLE_IMAGE_2 = os.path.join(ASSET_FOLDER, 'obstacle_2.png')
+
+
+MENU_MUSIC = os.path.join(ASSET_FOLDER, 'menu.mp3')
 
 # Dialogus
 CUTSCENE_DIALOGUE_CSV_1 = os.path.join(os.path.dirname(__file__), 'cutscene_dialogues_1.csv')
 CUTSCENE_DIALOGUE_CSV_2 = os.path.join(os.path.dirname(__file__), 'cutscene_dialogues_2.csv')
 CUTSCENE_DIALOGUE_CSV_3 = os.path.join(os.path.dirname(__file__), 'cutscene_dialogues_3.csv')
 
+CUTSCENE_DIALOGUE_CSV_1A = os.path.join(os.path.dirname(__file__), 'cutscene_dialogues_1A.csv')
+CUTSCENE_DIALOGUE_CSV_2A = os.path.join(os.path.dirname(__file__), 'cutscene_dialogues_2A.csv')
+CUTSCENE_DIALOGUE_CSV_3A = os.path.join(os.path.dirname(__file__), 'cutscene_dialogues_3A.csv')
 
 # Game settings
 GRAVITY = 0.5

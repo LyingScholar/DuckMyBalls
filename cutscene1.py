@@ -1,4 +1,4 @@
-# cutscene.py
+# cutscene1.py
 import pygame
 from settings import *
 from dialogue import Dialogue

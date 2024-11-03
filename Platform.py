@@ -3,7 +3,7 @@ from settings import OBSTACLE_IMAGE
 
 # level.py (add to Platform class)
 class Platform(pygame.sprite.Sprite):
-    def __init__(self, x, y, width=100, height=20, image=OBSTACLE_IMAGE, moving=False, move_range=0, speed=0):
+    def __init__(self, x, y, width=100, height=100, image=OBSTACLE_IMAGE, moving=False, move_range=0, speed=0):
         super().__init__()
         original_image = pygame.image.load(image).convert_alpha()
         self.image = pygame.transform.scale(original_image, (width, height))
