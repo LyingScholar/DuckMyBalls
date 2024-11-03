@@ -68,13 +68,13 @@ def play_level(screen, duck, level, clock, joystick):
                 return False
             # Joystick input
             elif event.type == pygame.JOYBUTTONDOWN:
-                if event.button == 5:  # Button 0 - Jump
+                if event.button == 5:  # Button 5 - Jump
                     duck.jump()
                 elif event.button == 1:  # Button 1 - Move Left
                     duck.move(-1)
-                elif event.button == 0:  # Button 5 - Move Right
+                elif event.button == 0:  # Button 0 - Move Right
                     duck.move(1)
-                elif event.button == 8 or event.button == 9:  # Button 2 - Exit level
+                elif event.button == 8 or event.button == 9:  # Button 9 0r 8 - Exit
                     return False
             elif event.type == pygame.JOYBUTTONUP:
                 if event.button == 1 or event.button == 5:
