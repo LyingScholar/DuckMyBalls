@@ -63,29 +63,29 @@ class FlowerField(Level):
             # (x, y, width, height, image, moving, move_range, speed)
         platforms = [
             # Starting area
-            (200, 450, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
-            (400, 400, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
-            (600, 350, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
+            (200, 450, 100, 100, OBSTACLE_IMAGE, False, 0, 0),
+            (400, 400, 100, 100, OBSTACLE_IMAGE, False, 0, 0),
+            (600, 350, 100, 100, OBSTACLE_IMAGE, False, 0, 0),
             # First moving platform over a gap
             (800, 300, 100, 20, OBSTACLE_IMAGE, True, 200, 2),
 
             # Ascending platforms
-            (1100, 250, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
-            (1300, 200, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
+            (1100, 250, 100, 100, OBSTACLE_IMAGE, False, 0, 0),
+            (1300, 200, 100,100, OBSTACLE_IMAGE, False, 0, 0),
             # Small platforms requiring precise jumps
             
-            (1500, 250, 50, 20, OBSTACLE_IMAGE, False, 0, 0),
-            (1600, 300, 50, 20, OBSTACLE_IMAGE, False, 0, 0),
-            (1700, 350, 50, 20, OBSTACLE_IMAGE, False, 0, 0),
+            (1500, 250, 100,100, OBSTACLE_IMAGE, False, 0, 0),
+            (1600, 300, 100,100, OBSTACLE_IMAGE, False, 0, 0),
+            (1700, 350, 100,100, OBSTACLE_IMAGE, False, 0, 0),
             # Descending platforms
-            (1900, 400, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
-            (2100, 450, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
+            (1900, 400, 100,100, OBSTACLE_IMAGE, False, 0, 0),
+            (2100, 450, 100,100, OBSTACLE_IMAGE, False, 0, 0),
 
-            (2300, 400, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
-            (2500, 350, 100, 20, OBSTACLE_IMAGE, True, 300, 2),
+            (2300, 400, 100,100, OBSTACLE_IMAGE, False, 0, 0),
+            (2500, 350, 100,100, OBSTACLE_IMAGE, True, 300, 2),
             # High platforms requiring a high jump
-            (2900, 300, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
-            (3100, 250, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
+            (2900, 300, 100,100, OBSTACLE_IMAGE, False, 0, 0),
+            (3100, 250, 100,100, OBSTACLE_IMAGE, False, 0, 0),
 
 
             # Gap with collectible item

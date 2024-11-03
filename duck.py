@@ -11,7 +11,7 @@ class Duck(pygame.sprite.Sprite):
         self.vx = 0
         self.vy = 0
         self.on_ground = False
-        self.can_jump = True
+        self.jump_pressed = False
 
     def update(self, platforms):
         # Apply gravity
@@ -28,7 +28,7 @@ class Duck(pygame.sprite.Sprite):
             self.can_jump = False
         if not self.jump_pressed:
             self.can_jump = True
-            
+
     def collide(self, platforms, direction):
         for platform in platforms:
             if self.rect.colliderect(platform.rect):

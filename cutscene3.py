@@ -1,9 +1,9 @@
 # cutscene.py
 import pygame
-from settings import SCREEN_WIDTH, SCREEN_HEIGHT, DUCK_IMAGE_CUTSCENE, DUCK_IMAGE_3, CUTSCENE_DIALOGUE_CSV_3, CUTSCENE_3_BG
+from settings import *
 from dialogue import Dialogue
 
-class Cutscene2:
+class Cutscene3:
     def __init__(self):
         self.background = pygame.transform.scale(pygame.image.load(CUTSCENE_3_BG),(SCREEN_WIDTH,SCREEN_HEIGHT))
         

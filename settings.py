@@ -27,8 +27,9 @@ DUCK_IMAGE_CUTSCENE = os.path.join(ASSET_FOLDER, 'duck_cutscene.png')
 OBSTACLE_IMAGE = os.path.join(ASSET_FOLDER, 'obstacle.png')
 
 # Dialogus
-CUTSCENE_DIALOGUE_CSV = os.path.join(os.path.dirname(__file__), 'cutscene_dialogues.csv')
+CUTSCENE_DIALOGUE_CSV_1 = os.path.join(os.path.dirname(__file__), 'cutscene_dialogues_1.csv')
 CUTSCENE_DIALOGUE_CSV_2 = os.path.join(os.path.dirname(__file__), 'cutscene_dialogues_2.csv')
+CUTSCENE_DIALOGUE_CSV_3 = os.path.join(os.path.dirname(__file__), 'cutscene_dialogues_3.csv')
 
 
 # Game settings
