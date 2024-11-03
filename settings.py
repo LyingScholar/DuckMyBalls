@@ -11,6 +11,10 @@ FPS = 60
 # Asset paths
 ASSET_FOLDER = os.path.join(os.path.dirname(__file__), 'assets')
 DUCK_IMAGE = os.path.join(ASSET_FOLDER, 'duck.png')
+THE_DUCK_IMAGE = os.path.join(ASSET_FOLDER, 'duck_cutscene.png')
+DUCK_IMAGE_1 = os.path.join(ASSET_FOLDER, 'duck1.png')
+DUCK_IMAGE_2 = os.path.join(ASSET_FOLDER, 'duck2.png')
+DUCK_IMAGE_3 = os.path.join(ASSET_FOLDER, 'duck3.png')
 OBSTACLE_IMAGE = os.path.join(ASSET_FOLDER, 'obstacle.png')
 GROUND_IMAGE = os.path.join(ASSET_FOLDER, 'ground.png')
 BACKGROUND_IMAGES = [

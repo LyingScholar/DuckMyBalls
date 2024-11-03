@@ -16,7 +16,12 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("P Ducky")
     clock = pygame.time.Clock()
-
+    pygame.joystick.init()
+    joystick = None
+    
+    joystick = pygame.joystick.Joystick(0)
+    joystick.init()
+    print(f"Joystick detected: {joystick.get_name()}")
     menu = Menu()
     result = menu.run(screen)
     if result == "exit":
@@ -40,13 +45,13 @@ def main():
         result = cutscene.run(screen)
         if result == "exit":
             break
-        if not play_level(screen, duck, level, clock):
+        if not play_level(screen, duck, level, clock, joystick):
             break
         current_level_idx += 1
 
     pygame.quit()
 
-def play_level(screen, duck, level, clock):
+def play_level(screen, duck, level, clock, joystick):
     camera_x = 0
     running = True
     while running:
@@ -67,6 +72,28 @@ def play_level(screen, duck, level, clock):
             elif event.type == pygame.KEYUP:
                 if event.key in (KEY_LEFT, KEY_RIGHT):
                     duck.stop()
+
+            elif event.type == pygame.JOYBUTTONDOWN:
+                if event.button == 0:  # Button 0 - Jump
+                    duck.jump()
+                elif event.button == 1:  # Button 1 - Move Left
+                    duck.move(-1)
+                elif event.button == 5:  # Button 5 - Move Right
+                    duck.move(1)
+            elif event.type == pygame.JOYBUTTONUP:
+                if event.button == 1 or event.button == 5:
+                    # Stop movement when left or right button is released
+                    duck.stop()
+
+        
+        if joystick:
+            if joystick.get_button(1): 
+                duck.move(-1)
+            elif joystick.get_button(5): 
+                duck.move(1)
+            else:
+                # Only stop if neither left nor right is pressed
+                duck.stop()
 
         duck.update(level.platforms)
         level.update()
@@ -120,11 +147,12 @@ def create_level(index):
 
 def create_cutscene(index):
     characters = [
-        [{'image': DUCK_IMAGE, 'position': (350, 400), 'size': (100, 100)}],
-        [{'image': DUCK_IMAGE, 'position': (350, 400), 'size': (100, 100)}],
-        [{'image': DUCK_IMAGE, 'position': (350, 400), 'size': (100, 100)}]
+        [{'image': DUCK_IMAGE_1, 'position': (200, 200), 'size': (200, 200)}],
+        [{'image': DUCK_IMAGE_2, 'position': (200, 200), 'size': (100, 100)}],
+        [{'image': DUCK_IMAGE_3, 'position': (200, 200), 'size': (100, 100)}],
+        [{'image': THE_DUCK_IMAGE, 'position': (390, 100), 'size': (400, 400)}]
     ]
-    return Cutscene(CUTSCENE_BACKGROUNDS[index], characters[index], CUTSCENE_DIALOGUES[index])
+    return Cutscene(CUTSCENE_BACKGROUNDS[index],[characters[index],characters[3]], CUTSCENE_DIALOGUES[index])
 
 if __name__ == "__main__":
     main()

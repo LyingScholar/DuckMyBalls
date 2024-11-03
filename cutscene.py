@@ -32,7 +32,7 @@ class Cutscene:
     def draw(self, screen):
         screen.blit(self.background, (0, 0))
         for char in self.characters:
-            img = pygame.image.load(char['image']).convert_alpha()
-            img = pygame.transform.scale(img, char.get('size', (100, 100)))
-            screen.blit(img, char['position'])
+            img = pygame.image.load(char[0]['image']).convert_alpha()
+            img = pygame.transform.scale(img, char[0]['size'])
+            screen.blit(img, char[0]['position'])
         self.dialogue.draw(screen)
