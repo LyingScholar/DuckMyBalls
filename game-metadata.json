@@ -1,0 +1,14 @@
+{
+    "title": "Duckenomenon",
+    "author": "Jennie Wiley, Zane",
+    "summary": "In Duckenomenon, you control P Ducky through a series of challenging levels set in diverse environments like flower fields, city sewers, and polluted rivers. Each level presents unique obstacles and puzzles that require agility and quick thinking. Immerse yourself in the story through interactive cutscenes, all while enjoying seamless controller-based gameplay tailored for an optimal experience.",
+    "release_date": "2024-03-11",
+    "multiplayer": false,
+    "genres": [
+        "Platformer", "Adventure", "Puzzle"
+    ],
+    "times_played": 0,
+    "last_played": 0,
+    "cover_image": "(string) .png/.jpg RELATIVE PATH TO THE COVER IMAGE OF YOUR GAME",
+    "exec": "./main.py"
+}
