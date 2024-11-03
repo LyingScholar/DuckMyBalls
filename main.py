@@ -5,13 +5,14 @@ from duck import Duck
 from dialogue import Dialogue
 from level import FlowerField, CitySewer, PollutedRiver
 from game_menu import Menu
-from cutscene import Cutscene  # Ensure this import is present
+from cutscene import Cutscene
+from cutscene2 import Cutscene2
 
 def main():
     pygame.init()
     pygame.font.init()  # Initialize font module
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("Duck's Journey")
+    pygame.display.set_caption("P Ducky")
     clock = pygame.time.Clock()
 
     # Initialize game components
@@ -21,7 +22,7 @@ def main():
     levels = [FlowerField(), CitySewer(), PollutedRiver()]
     current_level_index = 0
     current_level = levels[current_level_index]
-    dialogue = None  # Initialize dialogue as None
+    dialogue = None
 
     # Camera offset
     camera_x = 0
@@ -90,11 +91,19 @@ def main():
             # Check for level completion
             if duck.rect.x >= current_level.level_width - duck.rect.width:
                 current_level_index += 1
+
                 if current_level_index < len(levels):
                     current_level = levels[current_level_index]
                     duck.rect.x = 100
                     duck.rect.y = 500
                     dialogue = None  # Reset dialogue for the new level if needed
+                    
+                    cutscene_action = cutscene2.run(screen)
+                    if cutscene_action == "exit":
+                        running = False
+                    else:
+                        playing = True
+
                 else:
                     # End of the game
                     playing = False

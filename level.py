@@ -68,22 +68,21 @@ class FlowerField(Level):
             (600, 350, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
             # First moving platform over a gap
             (800, 300, 100, 20, OBSTACLE_IMAGE, True, 200, 2),
+
             # Ascending platforms
             (1100, 250, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
             (1300, 200, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
             # Small platforms requiring precise jumps
+            
             (1500, 250, 50, 20, OBSTACLE_IMAGE, False, 0, 0),
             (1600, 300, 50, 20, OBSTACLE_IMAGE, False, 0, 0),
             (1700, 350, 50, 20, OBSTACLE_IMAGE, False, 0, 0),
             # Descending platforms
             (1900, 400, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
             (2100, 450, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
-            # Overhead platform with spikes underneath
+
             (2300, 400, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
-            (2300, 550, 100, 50, SPIKE_IMAGE, False, 0, 0),
-            # Moving platform over spikes
             (2500, 350, 100, 20, OBSTACLE_IMAGE, True, 300, 2),
-            (2500, 550, 100, 50, SPIKE_IMAGE, False, 0, 0),
             # High platforms requiring a high jump
             (2900, 300, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
             (3100, 250, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
@@ -127,18 +126,21 @@ class CitySewer(Level):
             (200, 450, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
             # Slippery platforms (if you implement slippery mechanics)
             (400, 400, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
-            # Platforms over toxic water (hazard)
+            
+            
+            # Platforms over toxic water (hazard???)
             (600, 350, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
             (800, 350, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
             # Moving platform to higher level
             (1000, 300, 100, 20, OBSTACLE_IMAGE, True, 150, 2),
+            
             # Vertical shafts
             (1200, 250, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
             (1200, 450, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
-            # Hazardous areas
+            
+
             (1400, 500, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
-            (1400, 550, 100, 50, SPIKE_IMAGE, False, 0, 0),
-            # Extend up to x = 10000
+            
             # ...
         ]
 

@@ -10,16 +10,21 @@ FPS = 60
 # Asset paths
 ASSET_FOLDER = os.path.join(os.path.dirname(__file__), 'assets')
 DUCK_IMAGE = os.path.join(ASSET_FOLDER, 'duck.png')
-SEAGULL_IMAGE = os.path.join(ASSET_FOLDER, 'seagull.png')
+DUCK_IMAGE_2 = os.path.join(ASSET_FOLDER, 'duck2.png')
+DUCK_IMAGE_3 = os.path.join(ASSET_FOLDER, 'duck3.png')
+
+CUTSCENE_1_BG = os.path.join(ASSET_FOLDER, 'cutscene_1_bg.jpg')
+CUTSCENE_2_BG = os.path.join(ASSET_FOLDER, 'cutscene_2_bg.jpg')
+CUTSCENE_3_BG = os.path.join(ASSET_FOLDER, 'cutscene_3_bg.jpg')
 
 BACKGROUND_FLOWER_FIELD = os.path.join(ASSET_FOLDER, 'background_flower_field.png')
 BACKGROUND_CITY_SEWER = os.path.join(ASSET_FOLDER, 'background_city_sewer.png')
 BACKGROUND_POLLUTED_RIVER = os.path.join(ASSET_FOLDER, 'background_polluted_river.png')
 GROUND_IMAGE = os.path.join(ASSET_FOLDER, 'ground.png')
 
+DUCK_IMAGE_CUTSCENE = os.path.join(ASSET_FOLDER, 'duck_cutscene.png')
 
 OBSTACLE_IMAGE = os.path.join(ASSET_FOLDER, 'obstacle.png')
-SPIKE_IMAGE = os.path.join(ASSET_FOLDER, 'spike.png')
 
 # Dialogus
 DIALOGUE_CSV = os.path.join(os.path.dirname(__file__), 'dialogues.csv')
