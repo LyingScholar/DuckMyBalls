@@ -16,7 +16,7 @@ class Menu:
         self.selected_option = 0
         self.music_volume = 1.0
         self.sfx_volume = 1.0
-        self.title = self.title_font.render("P Ducky Adventure", True, (255, 255, 0))
+        self.title = self.title_font.render("Duckenomenon", True, (255, 255, 0))
 
         # Joystick passed from main
         self.joystick = joystick

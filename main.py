@@ -26,7 +26,7 @@ def main():
     pygame.mixer.music.set_volume(1.0)
     pygame.mixer.music.play(-1)
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("Duckenomenon")
+    pygame.display.set_caption("Top Text")
     clock = pygame.time.Clock()
 
     menu = Menu(joystick)  # Pass joystick to menu
@@ -122,7 +122,7 @@ def create_level(index):
         platform_data = []
         x_positions = [300 + i * 300 for i in range(18)]  # 18 platforms, spacing of 300
         y_positions = [500 - (i % 6) * 50 for i in range(18)]  # Vary y positions
-        for i in range(18):
+        for i in range(16):
             platform = {
                 'x': x_positions[i],
                 'y': y_positions[i],
@@ -136,6 +136,18 @@ def create_level(index):
                 platform['move_range'] = 200
                 platform['speed'] = 2
             platform_data.append(platform)
+        for i in range(5):
+            platformie = {'x': 17*300 + 70*i,
+                    'y': 500 - 70*i,
+                    'width': 100,
+                    'height': 100,
+                    'image': OBSTACLE_IMAGE}
+            platform_data.append(platformie)
+            flower = {'x': 17*300 + 70*5,
+                    'y': 150,
+                    'width': 10,
+                    'height': 10,
+                    'image': FLOWER}
 
     elif index == 1:
         # Level 2: City Sewer

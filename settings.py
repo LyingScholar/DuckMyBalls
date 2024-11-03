@@ -27,8 +27,9 @@ CUTSCENE_BACKGROUNDS = [
     os.path.join(ASSET_FOLDER, 'cutscene_2_bg.png'),
     os.path.join(ASSET_FOLDER, 'cutscene_3_bg.jpg')
 ]
-MENU_BACKGROUND = os.path.join(ASSET_FOLDER, 'menu_background.png')
+MENU_BACKGROUND = os.path.join(ASSET_FOLDER, 'menu_background.jpg')
 MENU_MUSIC = os.path.join(ASSET_FOLDER, 'menu.mp3')
+FLOWER = os.path.join(ASSET_FOLDER, 'flower.png')
 
 # Dialogues
 DIALOGUE_FOLDER = os.path.join(os.path.dirname(__file__), 'dialogues')

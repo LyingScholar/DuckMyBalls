@@ -58,7 +58,7 @@ def emulate_joystick_events():
             if event.type == pygame.QUIT:
                 new_events.append(event)
                 continue
-
+    
             # Handle keyboard events
             if event.type in (pygame.KEYDOWN, pygame.KEYUP):
                 key = event.key
