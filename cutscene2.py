@@ -3,7 +3,7 @@ import pygame
 from settings import SCREEN_WIDTH, SCREEN_HEIGHT, DUCK_IMAGE_CUTSCENE, DUCK_IMAGE_2, CUTSCENE_DIALOGUE_CSV_2, CUTSCENE_2_BG
 from dialogue import Dialogue
 
-class cutscene2:
+class Cutscene2:
     def __init__(self):
         self.background = pygame.transform.scale(pygame.image.load(CUTSCENE_2_BG),(SCREEN_WIDTH,SCREEN_HEIGHT))
         

@@ -5,11 +5,11 @@ from dialogue import Dialogue
 
 class Cutscene2:
     def __init__(self):
-        self.background = pygame.transform.scale(pygame.image.load(CUTSCENE_2_BG),(SCREEN_WIDTH,SCREEN_HEIGHT))
+        self.background = pygame.transform.scale(pygame.image.load(CUTSCENE_3_BG),(SCREEN_WIDTH,SCREEN_HEIGHT))
         
         self.duck_image = pygame.transform.scale(pygame.image.load(DUCK_IMAGE_CUTSCENE).convert_alpha(), (300, 300))
-        self.duck_2_image = pygame.transform.scale(pygame.image.load(DUCK_IMAGE_2).convert_alpha(), (100, 100))
-        self.dialogue = Dialogue(CUTSCENE_DIALOGUE_CSV_2)
+        self.duck_2_image = pygame.transform.scale(pygame.image.load(DUCK_IMAGE_3).convert_alpha(), (100, 100))
+        self.dialogue = Dialogue(CUTSCENE_DIALOGUE_CSV_3)
         self.font = pygame.font.Font(None, 32)
         self.is_active = True
 

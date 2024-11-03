@@ -4,8 +4,8 @@ from settings import *
 from duck import Duck
 from level import FlowerField, CitySewer, PollutedRiver
 from game_menu import Menu
-from cutscene import Cutscene
-from cutscene2 import cutscene2
+from cutscene import Cutscene  # Import the cutscene classes
+from cutscene2 import Cutscene2  # Assuming you have a Cutscene2 class in cutscene2.py
 
 def main():
     pygame.init()
@@ -15,18 +15,25 @@ def main():
     pygame.display.set_caption("P Ducky")
     clock = pygame.time.Clock()
 
+    # Initialize joystick
     joystick = None
     if pygame.joystick.get_count() > 0:
         joystick = pygame.joystick.Joystick(0)
         joystick.init()
         print(f"Joystick detected: {joystick.get_name()}")
+        num_buttons = joystick.get_numbuttons()
+        print(f"Number of buttons: {num_buttons}")
+        for i in range(num_buttons):
+            print(f"Button {i}")
     else:
         print("No joystick detected.")
+
     # Initialize game components
     menu = Menu()
-    cutscene = Cutscene()
     duck = Duck(100, 500)
     levels = [FlowerField(), CitySewer(), PollutedRiver()]
+    cutscenes = [Cutscene(), Cutscene2()]  # List of cutscene instances
+
     current_level_index = 0
     current_level = levels[current_level_index]
     dialogue = None
@@ -43,12 +50,7 @@ def main():
     if action == "exit":
         running = False
     else:
-        # Run cutscene before starting the game
-        cutscene_action = cutscene.run(screen)
-        if cutscene_action == "exit":
-            running = False
-        else:
-            playing = True
+        playing = True  # Start the game without an initial cutscene
 
     # Main game loop
     while running:
@@ -64,44 +66,37 @@ def main():
                     if event.key == KEY_RIGHT:
                         duck.move_right()
                     if event.key == KEY_JUMP:
-                        duck.jump()
+                        duck.jump_pressed = True
                     if event.key == pygame.K_SPACE and dialogue and dialogue.is_active:
                         dialogue.skip()
                 if event.type == pygame.KEYUP:
                     if event.key == KEY_LEFT or event.key == KEY_RIGHT:
                         duck.stop()
+                    if event.key == KEY_JUMP:
+                        duck.jump_pressed = False
 
-                # Handle joystick input
+                # Handle joystick button events for debugging
                 if event.type == pygame.JOYBUTTONDOWN:
-                    if event.joy == joystick.get_id():
-                        if event.button == 1:  # Button 1 on controller
-                            duck.move_right()
-                        if event.button == 0:  # Button 2 on controller
-                            duck.jump()
-                        if event.button == 3:  # Button 3 on controller
-                            duck.move_left()
-                        if dialogue and dialogue.is_active:
-                            dialogue.skip()
+                    print(f"Joystick button {event.button} down")
                 if event.type == pygame.JOYBUTTONUP:
-                    if event.joy == joystick.get_id():
-                        if event.button == 0 or event.button == 2:
-                            duck.stop()
+                    print(f"Joystick button {event.button} up")
+
+            # Poll joystick input
             if joystick:
-            # Check buttons
-                buttons = joystick.get_button()
-                # Reset movement
+                num_buttons = joystick.get_numbuttons()
+                buttons = [joystick.get_button(i) for i in range(num_buttons)]
+                # Reset horizontal movement
                 duck.stop()
-                if buttons[0]:  # Button 1 pressed
+                if buttons[1]:  # Adjust indices based on your testing
                     duck.move_right()
-                if buttons[2]:  # Button 3 pressed
+                if buttons[3]:
                     duck.move_left()
-                if buttons[1]:  # Button 2 pressed
-                    duck.jump()
+                # Update jump_pressed state
+                duck.jump_pressed = buttons[0]  # Assuming button 0 is the jump button
                 # Handle dialogue skipping
-                if buttons[0] or buttons[1] or buttons[2]:
+                if any(buttons):
                     if dialogue and dialogue.is_active:
                         dialogue.skip()
-
 
             # Update game objects
             duck.update(current_level.platforms.sprites() + current_level.ground.sprites())
@@ -131,24 +126,34 @@ def main():
 
             # Check for level completion
             if duck.rect.x >= current_level.level_width - duck.rect.width:
-                current_level_index += 1
+                # Level completed
+                # Run post-level cutscenes
+                if current_level_index < len(cutscenes):
+                    # Play the cutscene of the previous duck
+                    cutscene_action = cutscenes[current_level_index].run(screen)
+                    if cutscene_action == "exit":
+                        running = False
+                        return
+                    # Immediately proceed to the next cutscene (if any)
+                    if current_level_index + 1 < len(cutscenes):
+                        cutscene_action = cutscenes[current_level_index + 1].run(screen)
+                        if cutscene_action == "exit":
+                            running = False
+                            return
 
+                # Prepare for next level
+                current_level_index += 1
                 if current_level_index < len(levels):
                     current_level = levels[current_level_index]
                     duck.rect.x = 100
                     duck.rect.y = 500
                     dialogue = None  # Reset dialogue for the new level if needed
-                    
-                    cutscene_action = cutscene2.run(screen)
-                    if cutscene_action == "exit":
-                        running = False
-                    else:
-                        playing = True
-
+                    playing = True
                 else:
                     # End of the game
                     playing = False
                     # Display end scene or credits
+
             clock.tick(FPS)
         else:
             # Show end scene or return to menu
