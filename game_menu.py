@@ -3,8 +3,9 @@
 import pygame
 import os
 from settings import *
+
 class Menu:
-    def __init__(self):
+    def __init__(self, joystick):
         self.background = pygame.transform.scale(
             pygame.image.load(MENU_BACKGROUND).convert(),
             (SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -16,6 +17,9 @@ class Menu:
         self.music_volume = 1.0
         self.sfx_volume = 1.0
         self.title = self.title_font.render("P Ducky Adventure", True, (255, 255, 0))
+
+        # Joystick passed from main
+        self.joystick = joystick
 
     def display_menu(self, screen):
         screen.blit(self.background, (0, 0))
@@ -35,17 +39,16 @@ class Menu:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return "exit"
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_UP:
+                elif event.type == pygame.JOYBUTTONDOWN:
+                    if event.button == 0:  # Move up
                         self.selected_option = (self.selected_option - 1) % len(self.options)
-                    elif event.key == pygame.K_DOWN:
+                    elif event.button == 2:  # Move down
                         self.selected_option = (self.selected_option + 1) % len(self.options)
-                    elif event.key == pygame.K_RETURN:
+                    elif event.button == 5:  # Select
                         result = self.execute_option(screen)
                         if result == "exit" or result == "start":
                             return result
-                    elif event.key == pygame.K_ESCAPE:
-                        # Exit the game if ESC is pressed in the main menu
+                    elif event.button == 3:  # Exit
                         return "exit"
             clock.tick(FPS)
 
@@ -87,37 +90,37 @@ class Menu:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return "exit"
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_UP:
+                elif event.type == pygame.JOYBUTTONDOWN:
+                    if event.button == 0:  # Move up
                         selected = (selected - 1) % len(options)
-                    elif event.key == pygame.K_DOWN:
+                    elif event.button == 2:  # Move down
                         selected = (selected + 1) % len(options)
-                    elif event.key == pygame.K_LEFT:
+                    elif event.button == 5:  # Select
+                        if selected == 3:
+                            return
+                    elif event.button == 3:  # Back
+                        return
+                    elif event.button == 4:  # Decrease volume
                         if selected == 0:
                             self.music_volume = max(0.0, self.music_volume - 0.1)
                             pygame.mixer.music.set_volume(self.music_volume)
                         elif selected == 1:
                             self.sfx_volume = max(0.0, self.sfx_volume - 0.1)
-                    elif event.key == pygame.K_RIGHT:
+                    elif event.button == 5:  # Increase volume
                         if selected == 0:
                             self.music_volume = min(1.0, self.music_volume + 0.1)
                             pygame.mixer.music.set_volume(self.music_volume)
                         elif selected == 1:
                             self.sfx_volume = min(1.0, self.sfx_volume + 0.1)
-                    elif event.key == pygame.K_RETURN and selected == 2:
-                        return
-                    elif event.key == pygame.K_ESCAPE:
-                        # Return to main menu on ESC
-                        return
             pygame.time.Clock().tick(FPS)
 
     def show_instructions(self, screen):
         instructions = [
             "Instructions:",
-            "- Use arrow keys to move.",
-            "- Press 'Space' to jump.",
+            "- Use controller buttons to move.",
+            "- Button 0 to jump.",
             "- Reach the end of each level.",
-            "- Press 'Esc' to return."
+            "- Press button 2 to return."
         ]
         result = self.display_text_screen(screen, instructions)
         if result == "exit":
@@ -130,7 +133,7 @@ class Menu:
             "Graphics Designer: Jennie Wiley",
             "Music: Jennie Wiley",
             "Special Thanks: Noah and Lu",
-            "Press 'Esc' to return."
+            "Press button 2 to return."
         ]
         result = self.display_text_screen(screen, credits)
         if result == "exit":
@@ -147,8 +150,7 @@ class Menu:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return "exit"
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        # Return to main menu on ESC
+                elif event.type == pygame.JOYBUTTONDOWN:
+                    if event.button == 0 or event.button == 2:
                         return
             pygame.time.Clock().tick(FPS)
