@@ -1,6 +1,7 @@
-character,text
-Main Duck,"Hello, is anyone here?"
-Duck 2,"Over here! I need help cleaning up the City Sewer."
-Main Duck,"What's going on?"
-Duck 2,"It's clogged with pollution. Can you help me clear it?"
-Main Duck,"Absolutely. Let's get to work."
+character,text, display_time
+Purple duck, "Oh, my stone! My precious stone is gone!", 5
+You, "I can help milady!", 5
+You, "(If you would be interested in marrying me)", 4
+Purple duck,  "Please kindly jump into this hole and find my stone.", 5
+Purple duck, "You'll know it when you see it." , 5
+You, "Don't mind if I do.", 5

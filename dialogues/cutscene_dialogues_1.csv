@@ -1,7 +1,7 @@
-character,text,display_time
-Miku,"Hello oh kind Duck! Are you headed across the meadow?",5
-Blues,"You call that a meadow?",5
-Miku,"Well it used to be one. A long time ago. Are you headed there?",5
-Blues,"Yes, I am. What do you want, oh friendly duckling?",5
-Miku,"There is a flower, white as the moon. My mother loves it; but it's too high for me to reach, Could you get it for me?",5
-Blues,"Ofcourse, little one.",5
+character,text, display_time
+You, "Hello good sir.",5
+You,"would you perhaps be interested in being my partner?",4
+Orange duck, "Not particularly.", 5
+Orange duck, " But mayhaps if you fetch me a flower from the meadows.",4 
+Orange duck, "What used to be the meadows anyway. Well; get going.",5
+You, "Await my arrival beautiful.", 5

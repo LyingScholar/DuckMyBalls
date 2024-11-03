@@ -23,11 +23,11 @@ BACKGROUND_IMAGES = [
     os.path.join(ASSET_FOLDER, 'background_polluted_river.png')
 ]
 CUTSCENE_BACKGROUNDS = [
-    os.path.join(ASSET_FOLDER, 'cutscene_1_bg.jpg'),
+    os.path.join(ASSET_FOLDER, 'cutscene_1_bg.png'),
     os.path.join(ASSET_FOLDER, 'cutscene_2_bg.png'),
-    os.path.join(ASSET_FOLDER, 'cutscene_3_bg.jpg')
+    os.path.join(ASSET_FOLDER, 'cutscene_3_bg.png')
 ]
-MENU_BACKGROUND = os.path.join(ASSET_FOLDER, 'menu_background.jpg')
+MENU_BACKGROUND = os.path.join(ASSET_FOLDER, 'home.png')
 MENU_MUSIC = os.path.join(ASSET_FOLDER, 'menu.mp3')
 FLOWER = os.path.join(ASSET_FOLDER, 'flower.png')
 

@@ -9,6 +9,6 @@
     ],
     "times_played": 0,
     "last_played": 0,
-    "cover_image": "(string) .png/.jpg RELATIVE PATH TO THE COVER IMAGE OF YOUR GAME",
+    "cover_image": "./assets/duckenomenon.png",
     "exec": "./main.py"
-}
+}s

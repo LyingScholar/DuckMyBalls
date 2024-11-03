@@ -1,5 +1,10 @@
-character,text
-Main Duck,"Hi there, do you need assistance?"
-Duck 3,"Yes! The river is heavily polluted, and the fish are dying."
-Main Duck,"That's terrible. Let's clean it up together."
-Duck 3,"Thank you! We need all the help we can get."
+character,text, display_time
+You, "Please... marry me.", 3
+Green duck, "I am not fit to marry anyone right now.", 4
+Green duck, "But I would love to. Could you perhaps find me...", 5
+You, "Find you something? Please don't be using me just for this.", 4
+Green duck, "No! I am sick and merely want some clean water.", 5
+Green duck, "But all the rivers have gone bad...",4
+Green duck, "That purple duck has been ruining them all.,4
+You, "That explains a lot.", 3
+You, "Allow me to find you some water!" , 2

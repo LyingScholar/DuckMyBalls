@@ -1,6 +1,8 @@
-character,text
-Main Duck,"Thanks for helping me clear the Flower Field!"
-Duck 1,"No problem! I couldn't have done it without you."
-Main Duck,"Happy to help. Now, I need to continue my journey."
-Duck 1,"Good luck! I heard there's trouble in the City Sewer."
-Main Duck,"I'll check it out. See you around!"
+character,text, display_time
+You, "I have fetched the last living flower I could find!", 5
+You, " Please marry me.", 4
+Orange duck, "Oh... I didn't think you actually would.", 5
+Orange duck, " I already have a partner.", 4
+You, "Oh." , 5
+Orange duck, "Well... I wish you the best." , 5
+Orange duck, "Please move along though.", 5
