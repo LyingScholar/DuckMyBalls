@@ -12,6 +12,12 @@ class Dialogue:
         self.font = pygame.font.Font(None, 32)
         self.is_active = True
         self.line_completed = False  # Indicates if the current line has finished displaying
+        
+        # Dialogue box settings
+        self.box_width = 700
+        self.box_height = 150
+        self.box_color = (0, 0, 0)  # Black box for Undertale style
+        self.text_color = (255, 255, 255)  # White text
 
     def load_dialogue(self, csv_file):
         dialogue_queue = []
@@ -45,9 +51,20 @@ class Dialogue:
 
     def draw(self, screen):
         if self.current_line:
+            # Calculate position of dialogue box (centered at the bottom)
+            screen_width, screen_height = screen.get_size()
+            box_x = (screen_width - self.box_width) // 2
+            box_y = screen_height - self.box_height - 50  # 50 pixels from the bottom
+            
+            # Draw the dialogue box
+            pygame.draw.rect(screen, self.box_color, (box_x, box_y, self.box_width, self.box_height))
+            pygame.draw.rect(screen, self.text_color, (box_x, box_y, self.box_width, self.box_height), 3)  # White outline
+
+            # Prepare and center the text inside the box
             text = f"{self.current_line['character']}: {self.displaying_text}"
-            text_surface = self.font.render(text, True, (255, 255, 255))
-            screen.blit(text_surface, (50, 500))  # Adjust position as needed
+            text_surface = self.font.render(text, True, self.text_color)
+            text_rect = text_surface.get_rect(center=(screen_width // 2, box_y + self.box_height // 2))
+            screen.blit(text_surface, text_rect)
 
     def skip(self):
         if self.current_line:

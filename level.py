@@ -2,12 +2,16 @@
 import pygame
 from settings import *
 
+import pygame
+from settings import *
+
 class Platform(pygame.sprite.Sprite):
     def __init__(self, x, y, width=100, height=20, image=OBSTACLE_IMAGE, moving=False, move_range=0, speed=0):
         super().__init__()
         original_image = pygame.image.load(image).convert_alpha()
         self.image = pygame.transform.scale(original_image, (width, height))
         self.rect = self.image.get_rect(topleft=(x, y))
+        self.mask = pygame.mask.from_surface(self.image)  # Create a mask from the image's alpha channel
         self.moving = moving
         self.move_range = move_range
         self.speed = speed
@@ -20,11 +24,13 @@ class Platform(pygame.sprite.Sprite):
             if abs(self.rect.x - self.initial_x) >= self.move_range:
                 self.direction *= -1  # Change direction
 
+
 class Ground(pygame.sprite.Sprite):
     def __init__(self, x, y, width, image=GROUND_IMAGE):
         super().__init__()
         original_image = pygame.image.load(image).convert_alpha()
         self.image = pygame.transform.scale(original_image, (width, SCREEN_HEIGHT - y))
+        self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect(topleft=(x, y))
 
 class Level:
@@ -67,7 +73,7 @@ class FlowerField(Level):
             (400, 400, 100, 100, OBSTACLE_IMAGE, False, 0, 0),
             (600, 350, 100, 100, OBSTACLE_IMAGE, False, 0, 0),
             # First moving platform over a gap
-            (800, 300, 100, 20, OBSTACLE_IMAGE, True, 200, 2),
+            (800, 300, 100, 100, OBSTACLE_IMAGE, True, 200, 2),
 
             # Ascending platforms
             (1100, 250, 100, 100, OBSTACLE_IMAGE, False, 0, 0),
@@ -93,22 +99,22 @@ class FlowerField(Level):
             
             
             # descending platforms
-            (3500, 250, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
-            (3700, 300, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
-            (3900, 350, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
+            (3500, 250, 100, 100, OBSTACLE_IMAGE, False, 0, 0),
+            (3700, 300, 100, 100, OBSTACLE_IMAGE, False, 0, 0),
+            (3900, 350, 100, 100, OBSTACLE_IMAGE, False, 0, 0),
             # Long stretch with enemies (if implemented)
 
 
 
-            (4200, 400, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
-            (4400, 450, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
-            (4600, 500, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
+            (4200, 400, 100, 100, OBSTACLE_IMAGE, False, 0, 0),
+            (4400, 450, 100, 100, OBSTACLE_IMAGE, False, 0, 0),
+            (4600, 500, 100, 100, OBSTACLE_IMAGE, False, 0, 0),
         ]
 
 
         x = 4800
         while x < 7000:
-            platforms.append((x, 550 - (x % 400), 100, 20, OBSTACLE_IMAGE, False, 0, 0))
+            platforms.append((x, 550 - (x % 400), 100, 100, OBSTACLE_IMAGE, False, 0, 0))
             x += 200
 
         super().__init__(BACKGROUND_FLOWER_FIELD, platforms)
@@ -123,23 +129,23 @@ class CitySewer(Level):
     def __init__(self):
         platforms = [
             # Starting area
-            (200, 450, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
+            (200, 450, 100, 100, OBSTACLE_IMAGE, False, 0, 0),
             # Slippery platforms (if you implement slippery mechanics)
-            (400, 400, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
+            (400, 400, 100, 100, OBSTACLE_IMAGE, False, 0, 0),
             
             
             # Platforms over toxic water (hazard???)
-            (600, 350, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
-            (800, 350, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
+            (600, 350, 100, 100, OBSTACLE_IMAGE, False, 0, 0),
+            (800, 350, 100, 100, OBSTACLE_IMAGE, False, 0, 0),
             # Moving platform to higher level
-            (1000, 300, 100, 20, OBSTACLE_IMAGE, True, 150, 2),
+            (1000, 300, 100, 100, OBSTACLE_IMAGE, True, 150, 2),
             
             # Vertical shafts
-            (1200, 250, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
-            (1200, 450, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
+            (1200, 250, 100, 100, OBSTACLE_IMAGE, False, 0, 0),
+            (1200, 450, 100, 100, OBSTACLE_IMAGE, False, 0, 0),
             
 
-            (1400, 500, 100, 20, OBSTACLE_IMAGE, False, 0, 0),
+            (1400, 500, 100, 100, OBSTACLE_IMAGE, False, 0, 0),
             
             # ...
         ]
@@ -147,7 +153,7 @@ class CitySewer(Level):
         # Extend the level
         x = 1600
         while x < 10000:
-            platforms.append((x, 550 - (x % 500), 100, 20, OBSTACLE_IMAGE, False, 0, 0))
+            platforms.append((x, 550 - (x % 500), 100, 100, OBSTACLE_IMAGE, False, 0, 0))
             x += 250
 
         super().__init__(BACKGROUND_CITY_SEWER, platforms)

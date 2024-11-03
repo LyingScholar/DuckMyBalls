@@ -4,8 +4,9 @@ from settings import *
 from duck import Duck
 from level import FlowerField, CitySewer, PollutedRiver
 from game_menu import Menu
-from cutscene import Cutscene  # Import the cutscene classes
-from cutscene2 import Cutscene2  # Assuming you have a Cutscene2 class in cutscene2.py
+from cutscene1 import Cutscene1
+from cutscene2 import Cutscene2
+from cutscene3 import Cutscene3
 
 def main():
     pygame.init()
@@ -32,7 +33,7 @@ def main():
     menu = Menu()
     duck = Duck(100, 500)
     levels = [FlowerField(), CitySewer(), PollutedRiver()]
-    cutscenes = [Cutscene(), Cutscene2()]  # List of cutscene instances
+    cutscenes = [Cutscene1(), Cutscene2(),Cutscene3]
 
     current_level_index = 0
     current_level = levels[current_level_index]
@@ -50,8 +51,15 @@ def main():
     if action == "exit":
         running = False
     else:
-        playing = True  # Start the game without an initial cutscene
+        # Run cutscene before starting the game
+                cutscene_action = cutscenes[0].run(screen)
+                if cutscene_action == "exit":
+                    running = False
+                else:
+                    playing = True 
+        
 
+    
     # Main game loop
     while running:
         if playing:

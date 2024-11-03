@@ -12,6 +12,7 @@ ASSET_FOLDER = os.path.join(os.path.dirname(__file__), 'assets')
 DUCK_IMAGE = os.path.join(ASSET_FOLDER, 'duck.png')
 DUCK_IMAGE_1 = os.path.join(ASSET_FOLDER, 'duck1.png')
 DUCK_IMAGE_2 = os.path.join(ASSET_FOLDER, 'duck2.png')
+DUCK_IMAGE_3 = os.path.join(ASSET_FOLDER, 'duck3.png')
 
 CUTSCENE_1_BG = os.path.join(ASSET_FOLDER, 'cutscene_1_bg.jpg')
 CUTSCENE_2_BG = os.path.join(ASSET_FOLDER, 'cutscene_2_bg.jpg')
