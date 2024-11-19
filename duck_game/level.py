@@ -8,7 +8,10 @@ from duck_game.resource_manager import ResourceManager
 class Level:
     def __init__(self, background_image, platform_data, ground_level):
         self.platforms = pygame.sprite.Group()
-        self.background = ResourceManager.load_image(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        if isinstance(background_image, pygame.Surface):
+            self.background = background_image
+        else:
+            self.background = ResourceManager.load_image(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
         self.ground_level = ground_level
         self.create_platforms(platform_data)
         self.add_ground()

@@ -1,11 +1,11 @@
 # main.py
 
 import pygame
-from settings import *
-from duck import Duck
-from level import Level
-from game_menu import Menu
-from cutscene import Cutscene
+from duck_game.settings import *
+from duck_game.duck import Duck
+from duck_game.level import Level
+from duck_game.game_menu import Menu
+from duck_game.cutscene import Cutscene
 
 def main():
     pygame.init()
@@ -22,13 +22,17 @@ def main():
         print("No joystick detected. Using keyboard input.")
         joystick = None
 
+    # Load and play menu music
     pygame.mixer.music.load(MENU_MUSIC)
     pygame.mixer.music.set_volume(1.0)
     pygame.mixer.music.play(-1)
+
+    # Set up the game window
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("Top Text")
+    pygame.display.set_caption("Duckenomenon")
     clock = pygame.time.Clock()
 
+    # Create and run the main menu
     menu = Menu(joystick)  # Pass joystick to menu
     result = menu.run(screen)
     if result == "exit":
@@ -38,13 +42,15 @@ def main():
         pygame.quit()
         return
 
+    # Create levels and cutscenes
     levels = [create_level(idx) for idx in range(3)]
     cutscenes = [create_cutscene(idx) for idx in range(3)]
     duck = Duck(100, 500)
     current_level_idx = 0
 
+    # Main game loop
     while current_level_idx < len(levels):
-        duck.rect.x = 100  # Reset duck
+        duck.rect.x = 100  # Reset duck position
         duck.rect.y = 500
         level = levels[current_level_idx]
         cutscene = cutscenes[current_level_idx]
@@ -55,7 +61,7 @@ def main():
             break
         current_level_idx += 1
 
-    # credits
+    # Display the end credits
     end_screen(screen)
     pygame.quit()
 
@@ -64,61 +70,88 @@ def play_level(screen, duck, level, clock, joystick):
     running = True
     while running:
         clock.tick(FPS)
+
         # Handle events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return False
-            # Joystick input
-            elif event.type == pygame.JOYBUTTONDOWN:
-                if event.button == 5:  # 5 - Jomp
-                    duck.jump()
-                elif event.button == 1:  # 1 - Left
-                    duck.move(-1)
-                elif event.button == 0:  # 0 - Right
-                    duck.move(1)
-                elif event.button == 8 or event.button == 9:  # 8 or 9 - Exit
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
                     return False
-            elif event.type == pygame.JOYBUTTONUP:
-                if event.button == 1 or event.button == 0:
-                    # Stop movement when left or right button is released
-                    duck.stop()
+                elif event.key == pygame.K_SPACE:
+                    duck.jump()
+            elif event.type == pygame.JOYBUTTONDOWN:
+                if event.button == 5:  # Jump button on the controller
+                    duck.jump()
+                elif event.button == 8 or event.button == 9:  # Exit buttons
+                    return False
 
-        # Continuous joystick input (for holding down buttons)
-        if joystick:
-            # For continuous movement, check if the buttons are pressed
-            if joystick.get_button(1):  # Button 1 - Move Left
-                duck.move(-1)
-            elif joystick.get_button(0):  # Button 0 - Move Right
-                duck.move(1)
-            else:
-                # Only stop if neither left nor right is pressed
-                duck.stop()
-            # Jump is handled in JOYBUTTONDOWN to prevent continuous jumping
+        # Handle continuous input
+        handle_input(duck, joystick)
 
-        duck.update(level.platforms)
+        # Update game objects
+        duck.update(level.platforms, level.level_width)
         level.update()
+
+        # Update camera position
         camera_x = max(0, min(duck.rect.x - SCREEN_WIDTH // 2, level.level_width - SCREEN_WIDTH))
         
-        
+        # Draw everything
         level.draw(screen, camera_x)
         duck.draw(screen, camera_x)
         pygame.display.flip()
 
-        # Check if duck fell below the ground
+        # Check if duck fell below the screen
         if duck.rect.y > SCREEN_HEIGHT:
             # Reset duck position
             duck.rect.x = 100
             duck.rect.y = 500
 
+        # Check if level is completed
         if duck.rect.x >= level.level_width - duck.rect.width:
             return True
     return False
+
+
+def handle_input(duck, joystick):
+    pygame.event.pump()
+    keys = pygame.key.get_pressed()
+    if joystick and pygame.joystick.get_init() and joystick.get_init():
+        # Joystick input
+        if joystick.get_button(1):  # Move Left
+            duck.move(-1)
+        elif joystick.get_button(0):  # Move Right
+            duck.move(1)
+        else:
+            duck.stop()
+        # Jump is handled in the event loop when the button is pressed
+    else:
+        # keycode_left = pygame.K_LEFT
+        # keycode_right = pygame.K_RIGHT
+        # scancode_left = pygame.key.get_scancode_from_key(keycode_left)
+        # scancode_right = pygame.key.get_scancode_from_key(keycode_right)
+        # if len(keys) > max(scancode_left, scancode_right):
+        #     if keys[scancode_left]:
+        #         duck.move(-1)
+        #     elif keys[scancode_right]:
+        #         duck.move(1)
+        #     else:
+        #         duck.stop()
+        # else:
+        #     duck.stop()
+        if keys[pygame.K_LEFT]:
+            duck.move(-1)
+        elif keys[pygame.K_RIGHT]:
+            duck.move(1)
+        else:
+            duck.stop()
+        # Jump is handled in the event loop when the key is pressed
 
 def create_level(index):
     ground_level = 550  # Y-coordinate of the ground
 
     if index == 0:
-        # Level 1: Flower Field)
+        # Level 1: Flower Field
         platform_data = []
         x_positions = [300 + i * 300 for i in range(18)]  # 18 platforms, spacing of 300
         y_positions = [500 - (i % 6) * 50 for i in range(18)]  # Vary y positions
@@ -136,18 +169,7 @@ def create_level(index):
                 platform['move_range'] = 200
                 platform['speed'] = 2
             platform_data.append(platform)
-        for i in range(5):
-            platformie = {'x': 17*300 + 70*i,
-                    'y': 500 - 70*i,
-                    'width': 100,
-                    'height': 100,
-                    'image': OBSTACLE_IMAGE}
-            platform_data.append(platformie)
-            flower = {'x': 17*300 + 70*5,
-                    'y': 150,
-                    'width': 10,
-                    'height': 10,
-                    'image': FLOWER}
+        # Add special platforms or items if needed
 
     elif index == 1:
         # Level 2: City Sewer
@@ -231,29 +253,5 @@ def end_screen(screen):
                 running = False
         clock.tick(FPS)
 
-def handle_input(duck, joystick):
-    keys = pygame.key.get_pressed()
-    if joystick:
-        # Joystick input
-        if joystick.get_button(1):  # Move Left
-            duck.move(-1)
-        elif joystick.get_button(0):  # Move Right
-            duck.move(1)
-        else:
-            duck.stop()
-        if joystick.get_button(5):  # Jump
-            duck.jump()
-    else:
-        # Keyboard input
-        if keys[pygame.K_LEFT]:
-            duck.move(-1)
-        elif keys[pygame.K_RIGHT]:
-            duck.move(1)
-        else:
-            duck.stop()
-        if keys[pygame.K_SPACE]:
-            duck.jump()
-
-            
 if __name__ == "__main__":
     main()

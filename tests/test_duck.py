@@ -68,3 +68,17 @@ def test_collision_with_platform(duck, platforms):
 def test_fall_off_screen(duck):
     duck.rect.y = SCREEN_HEIGHT + 100
     assert duck.rect.y > SCREEN_HEIGHT
+
+def test_duck_left_boundary(duck):
+    duck.rect.x = 0
+    duck.move(-1)
+    duck.update(pygame.sprite.Group(), level_width=1000)
+    assert duck.rect.x >= 0
+
+def test_duck_right_boundary(duck):
+    level_width = 1000
+    duck.rect.x = level_width - duck.rect.width
+    duck.move(1)
+    duck.update(pygame.sprite.Group(), level_width=level_width)
+    assert duck.rect.x <= level_width - duck.rect.width
+

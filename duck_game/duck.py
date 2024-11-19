@@ -22,7 +22,7 @@ class Duck(pygame.sprite.Sprite):
         self.speed = 5
         self.on_ground = False
 
-    def update(self, platforms):
+    def update(self, platforms, level_width = None):
         """Update the duck's position and handle collisions.
 
         Args:
@@ -33,6 +33,11 @@ class Duck(pygame.sprite.Sprite):
         self.handle_collisions(platforms, 'horizontal')
         self.move_vertical()
         self.handle_collisions(platforms, 'vertical')
+        if level_width is not None:
+            if self.rect.x < 0:
+                self.rect.x = 0
+            elif self.rect.x > level_width - self.rect.width:
+                self.rect.x = level_width - self.rect.width
 
     def apply_gravity(self):
         """Apply gravity to the duck's vertical velocity."""
