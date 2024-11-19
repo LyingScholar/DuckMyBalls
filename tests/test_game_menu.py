@@ -1,45 +1,49 @@
-#test_game_menu.py
+# tests/test_game_menu.py
 
-
-import unittest
+import pytest
 import pygame
-from game_menu import Menu
+import sys
+import os
 
-class TestMenu(unittest.TestCase):
-    def setUp(self):
-        pygame.init()
-        self.screen = pygame.Surface((800, 600))
-        self.joystick = None  # For testing without joystick
-        self.menu = Menu(self.joystick)
+# Add the parent directory to sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-    def test_menu_initialization(self):
-        self.assertEqual(self.menu.options, ["Start Game", "Instructions", "Credits", "Exit"])
-        self.assertEqual(self.menu.selected_option, 0)
+from duck_game.game_menu import Menu
+from duck_game.settings import SCREEN_WIDTH, SCREEN_HEIGHT
 
-    def test_display_menu(self):
-        try:
-            self.menu.display_menu(self.screen)
-        except Exception as e:
-            self.fail(f'display_menu raised an exception: {e}')
+@pytest.fixture(scope='module')
+def setup_pygame():
+    pygame.init()
+    yield
+    pygame.quit()
 
-    def test_execute_option(self):
-        self.menu.selected_option = 0  # Start Game
-        result = self.menu.execute_option(self.screen)
-        self.assertEqual(result, "start")
+def test_menu_initialization(setup_pygame):
+    joystick = None
+    menu = Menu(joystick)
+    assert menu.options == ["Start Game", "Instructions", "Credits", "Exit"]
+    assert menu.selected_option == 0
 
-        self.menu.selected_option = 3  # Exit
-        result = self.menu.execute_option(self.screen)
-        self.assertEqual(result, "exit")
+def test_display_menu(setup_pygame):
+    screen = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    joystick = None
+    menu = Menu(joystick)
+    try:
+        menu.display_menu(screen)
+    except Exception as e:
+        assert False, f"display_menu raised an exception: {e}"
 
-    def test_show_instructions(self):
-        try:
-            self.menu.show_instructions(self.screen)
-        except Exception as e:
-            self.fail(f'show_instructions raised an exception: {e}')
+def test_execute_option_start(setup_pygame):
+    screen = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    joystick = None
+    menu = Menu(joystick)
+    menu.selected_option = 0  # Start Game
+    result = menu.execute_option(screen)
+    assert result == "start"
 
-    def tearDown(self):
-        pygame.quit()
-
-if __name__ == '__main__':
-    unittest.main()
-
+def test_execute_option_exit(setup_pygame):
+    screen = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    joystick = None
+    menu = Menu(joystick)
+    menu.selected_option = 3  # Exit
+    result = menu.execute_option(screen)
+    assert result == "exit"

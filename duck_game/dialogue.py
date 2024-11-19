@@ -1,7 +1,8 @@
-# dialogue.py
+# duck_game/dialogue.py
 
 import pygame
 import csv
+from duck_game.settings import *
 
 class Dialogue:
     def __init__(self, csv_file):
@@ -34,11 +35,11 @@ class Dialogue:
 
     def draw(self, screen):
         if self.current_line:
-            box_rect = pygame.Rect(50, 450, 700, 100)
+            box_rect = pygame.Rect(50, SCREEN_HEIGHT - 150, SCREEN_WIDTH - 100, 100)
             pygame.draw.rect(screen, (0, 0, 0), box_rect)
             pygame.draw.rect(screen, (255, 255, 255), box_rect, 2)
             text_surface = self.font.render(self.display_text, True, (255, 255, 255))
-            screen.blit(text_surface, (60, 460))
+            screen.blit(text_surface, (60, SCREEN_HEIGHT - 140))
 
     def skip(self):
         self.current_line = None

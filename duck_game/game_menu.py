@@ -1,24 +1,18 @@
-# game_menu.py
+# duck_game/game_menu.py
 
 import pygame
 import os
-from .settings import *
+from duck_game.settings import *
+from duck_game.resource_manager import ResourceManager
 
 class Menu:
     def __init__(self, joystick):
-        self.background = pygame.transform.scale(
-            pygame.image.load(MENU_BACKGROUND).convert(),
-            (SCREEN_WIDTH, SCREEN_HEIGHT)
-        )
-        self.title_font = pygame.font.SysFont("Comic Sans", 72)
+        self.background = ResourceManager.load_image(MENU_BACKGROUND, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.title_font = pygame.font.SysFont("Comic Sans MS", 72)
         self.font = pygame.font.SysFont("Impact", 35)
         self.options = ["Start Game", "Instructions", "Credits", "Exit"]
         self.selected_option = 0
-        self.music_volume = 1.0
-        self.sfx_volume = 1.0
         self.title = self.title_font.render("Duckenomenon", True, (255, 255, 0))
-
-        # Joystick passed from main
         self.joystick = joystick
 
     def display_menu(self, screen):
@@ -39,6 +33,15 @@ class Menu:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return "exit"
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_UP:
+                        self.selected_option = (self.selected_option - 1) % len(self.options)
+                    elif event.key == pygame.K_DOWN:
+                        self.selected_option = (self.selected_option + 1) % len(self.options)
+                    elif event.key == pygame.K_RETURN:
+                        result = self.execute_option(screen)
+                        if result in ["exit", "start"]:
+                            return result
                 elif event.type == pygame.JOYBUTTONDOWN:
                     if event.button == 0:  # Move up
                         self.selected_option = (self.selected_option - 1) % len(self.options)
@@ -46,7 +49,7 @@ class Menu:
                         self.selected_option = (self.selected_option + 1) % len(self.options)
                     elif event.button == 5:  # Select
                         result = self.execute_option(screen)
-                        if result == "exit" or result == "start":
+                        if result in ["exit", "start"]:
                             return result
                     elif event.button == 3:  # Exit
                         return "exit"
@@ -56,28 +59,21 @@ class Menu:
         if self.options[self.selected_option] == "Start Game":
             return "start"
         elif self.options[self.selected_option] == "Instructions":
-            result = self.show_instructions(screen)
-            if result == "exit":
-                return "exit"
+            self.show_instructions(screen)
         elif self.options[self.selected_option] == "Credits":
-            result = self.show_credits(screen)
-            if result == "exit":
-                return "exit"
+            self.show_credits(screen)
         elif self.options[self.selected_option] == "Exit":
             return "exit"
-
 
     def show_instructions(self, screen):
         instructions = [
             "Instructions:",
-            "- Use controller buttons to move.",
-            "- Button 0 to jump.",
+            "- Use arrow keys or controller to move.",
+            "- Press Space or Button 5 to jump.",
             "- Reach the end of each level.",
-            "- Press button 2 to return."
+            "- Press Esc or Button 3 to exit."
         ]
-        result = self.display_text_screen(screen, instructions)
-        if result == "exit":
-            return "exit"
+        self.display_text_screen(screen, instructions)
 
     def show_credits(self, screen):
         credits = [
@@ -86,14 +82,14 @@ class Menu:
             "Graphics Designer: Jennie Wiley",
             "Music: Jennie Wiley",
             "Special Thanks: Noah and Lu",
-            "Press button 2 to return."
+            "Press any key to return."
         ]
-        result = self.display_text_screen(screen, credits)
-        if result == "exit":
-            return "exit"
+        self.display_text_screen(screen, credits)
 
     def display_text_screen(self, screen, lines):
-        while True:
+        running = True
+        clock = pygame.time.Clock()
+        while running:
             screen.fill((0, 0, 0))
             for idx, line in enumerate(lines):
                 text_surface = self.font.render(line, True, (255, 255, 255))
@@ -102,8 +98,7 @@ class Menu:
             pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    return "exit"
-                elif event.type == pygame.JOYBUTTONDOWN:
-                    if event.button == 0 or event.button == 2:
-                        return
-            pygame.time.Clock().tick(FPS)
+                    running = False
+                elif event.type == pygame.KEYDOWN or event.type == pygame.JOYBUTTONDOWN:
+                    running = False
+            clock.tick(FPS)

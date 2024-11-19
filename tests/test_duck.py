@@ -2,14 +2,14 @@
 
 import pytest
 import pygame
-import os
 import sys
+import os
 
-# Add the parent directory to sys.path so that duck_game can be imported
+# Add the parent directory to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from duck_game.duck import Duck
-from duck_game.platform import Platform
+from duck_game.game_platform import Platform
 from duck_game.settings import SCREEN_WIDTH, SCREEN_HEIGHT, GRAVITY, JUMP_FORCE
 
 @pytest.fixture(scope='module')

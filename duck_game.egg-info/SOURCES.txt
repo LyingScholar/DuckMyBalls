@@ -1,0 +1,6 @@
+README.md
+setup.py
+duck_game.egg-info/PKG-INFO
+duck_game.egg-info/SOURCES.txt
+duck_game.egg-info/dependency_links.txt
+duck_game.egg-info/top_level.txt

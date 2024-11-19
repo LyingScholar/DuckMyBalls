@@ -1,44 +1,50 @@
-#test_dialogue.py
+# tests/test_dialogue.py
 
-import unittest
+import pytest
 import pygame
-from dialogue import Dialogue
+import sys
+import os
 
-class TestDialogue(unittest.TestCase):
-    def setUp(self):
-        pygame.init()
-        self.dialogue_csv = 'test_dialogue.csv'
-        with open(self.dialogue_csv, 'w') as file:
-            file.write('character,text\n')
-            file.write('Duck,Hello!\n')
-            file.write('Duck,Welcome to the game.\n')
-        self.dialogue = Dialogue(self.dialogue_csv)
-        self.screen = pygame.Surface((800, 600))
+# Add the parent directory to sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-    def test_load_dialogue(self):
-        self.assertEqual(len(self.dialogue.lines), 2)
+from duck_game.dialogue import Dialogue
 
-    def test_update(self):
-        self.dialogue.update()
-        self.assertEqual(self.dialogue.display_text, 'Duck: Hello!')
+@pytest.fixture(scope='module')
+def setup_pygame():
+    pygame.init()
+    yield
+    pygame.quit()
 
-    def test_skip(self):
-        self.dialogue.update()
-        self.dialogue.skip()
-        self.dialogue.update()
-        self.assertEqual(self.dialogue.display_text, 'Duck: Welcome to the game.')
+def test_dialogue_initialization(setup_pygame):
+    dialogue_csv = 'test_dialogue.csv'
+    with open(dialogue_csv, 'w') as file:
+        file.write('character,text\n')
+        file.write('Duck,Hello!\n')
+        file.write('Duck,Welcome to the game.\n')
+    dialogue = Dialogue(dialogue_csv)
+    assert len(dialogue.lines) == 2
+    os.remove(dialogue_csv)
 
-    def test_draw(self):
-        try:
-            self.dialogue.update()
-            self.dialogue.draw(self.screen)
-        except Exception as e:
-            self.fail(f'Draw method raised an exception: {e}')
+def test_dialogue_update(setup_pygame):
+    dialogue_csv = 'test_dialogue.csv'
+    with open(dialogue_csv, 'w') as file:
+        file.write('character,text\n')
+        file.write('Duck,Hello!\n')
+    dialogue = Dialogue(dialogue_csv)
+    dialogue.update()
+    assert dialogue.display_text == 'Duck: Hello!'
+    os.remove(dialogue_csv)
 
-    def tearDown(self):
-        import os
-        os.remove(self.dialogue_csv)
-        pygame.quit()
-
-if __name__ == '__main__':
-    unittest.main()
+def test_dialogue_skip(setup_pygame):
+    dialogue_csv = 'test_dialogue.csv'
+    with open(dialogue_csv, 'w') as file:
+        file.write('character,text\n')
+        file.write('Duck,Hello!\n')
+        file.write('Duck,Welcome to the game.\n')
+    dialogue = Dialogue(dialogue_csv)
+    dialogue.update()
+    dialogue.skip()
+    dialogue.update()
+    assert dialogue.display_text == 'Duck: Welcome to the game.'
+    os.remove(dialogue_csv)

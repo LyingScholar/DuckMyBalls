@@ -1,4 +1,6 @@
-from .settings import *
+# duck_game/camera.py
+
+from duck_game.settings import SCREEN_WIDTH, SCREEN_HEIGHT
 
 class Camera:
     def __init__(self, level_width, level_height):

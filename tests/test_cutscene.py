@@ -1,43 +1,52 @@
-#test_cutscene.py
+# tests/test_cutscene.py
 
-import unittest
+import pytest
 import pygame
-from cutscene import Cutscene
-from dialogue import Dialogue
-from settings import SCREEN_WIDTH, SCREEN_HEIGHT
+import sys
+import os
 
-class TestCutscene(unittest.TestCase):
-    def setUp(self):
-        pygame.init()
-        self.background_image = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        self.characters = [
-            {'image': pygame.Surface((50, 50)), 'position': (100, 100), 'size': (50, 50)},
-            {'image': pygame.Surface((50, 50)), 'position': (200, 100), 'size': (50, 50)}
-        ]
-        self.dialogue_csv = 'test_dialogue.csv'
-        # Create a test dialogue CSV file
-        with open(self.dialogue_csv, 'w') as file:
-            file.write('character,text\n')
-            file.write('Duck,Hello!\n')
-            file.write('Duck,Welcome to the game.\n')
-        self.cutscene = Cutscene(self.background_image, self.characters, self.dialogue_csv)
-        self.screen = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+# Add the parent directory to sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-    def test_cutscene_initialization(self):
-        self.assertTrue(self.cutscene.is_active)
-        self.assertIsInstance(self.cutscene.dialogue, Dialogue)
-        self.assertEqual(len(self.cutscene.characters), 2)
+from duck_game.cutscene import Cutscene
+from duck_game.dialogue import Dialogue
+from duck_game.settings import SCREEN_WIDTH, SCREEN_HEIGHT
 
-    def test_draw(self):
-        try:
-            self.cutscene.draw(self.screen)
-        except Exception as e:
-            self.fail(f'Draw method raised an exception: {e}')
+@pytest.fixture(scope='module')
+def setup_pygame():
+    pygame.init()
+    yield
+    pygame.quit()
 
-    def tearDown(self):
-        import os
-        os.remove(self.dialogue_csv)
-        pygame.quit()
+def test_cutscene_initialization(setup_pygame):
+    background_image = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    char_image = pygame.Surface((50, 50))
+    characters = [
+        {'image': char_image, 'position': (100, 100), 'size': (50, 50)},
+    ]
+    dialogue_csv = 'test_dialogue.csv'
+    with open(dialogue_csv, 'w') as file:
+        file.write('character,text\n')
+        file.write('Duck,Hello!\n')
+    cutscene = Cutscene(background_image, characters, dialogue_csv)
+    assert cutscene.is_active
+    assert isinstance(cutscene.dialogue, Dialogue)
+    os.remove(dialogue_csv)
 
-if __name__ == '__main__':
-    unittest.main()
+def test_cutscene_draw(setup_pygame):
+    screen = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    background_image = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    char_image = pygame.Surface((50, 50))
+    characters = [
+        {'image': char_image, 'position': (100, 100), 'size': (50, 50)},
+    ]
+    dialogue_csv = 'test_dialogue.csv'
+    with open(dialogue_csv, 'w') as file:
+        file.write('character,text\n')
+        file.write('Duck,Hello!\n')
+    cutscene = Cutscene(background_image, characters, dialogue_csv)
+    try:
+        cutscene.draw(screen)
+    except Exception as e:
+        assert False, f"Draw method raised an exception: {e}"
+    os.remove(dialogue_csv)

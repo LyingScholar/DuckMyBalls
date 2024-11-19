@@ -1,7 +1,6 @@
-# settings.py
+# duck_game/settings.py
 
 import os
-import pygame
 
 # Screen dimensions and FPS
 SCREEN_WIDTH = 800
@@ -45,8 +44,3 @@ CUTSCENE_DIALOGUES = [
 # Game physics
 GRAVITY = 0.6
 JUMP_FORCE = 12
-
-# Controls
-KEY_LEFT = pygame.K_LEFT
-KEY_RIGHT = pygame.K_RIGHT
-KEY_JUMP = pygame.K_SPACE
