@@ -114,13 +114,24 @@ def play_level(screen, duck, level, clock, joystick):
 
 
 def handle_input(duck, joystick):
-    pygame.event.pump()
+    pygame.event.pump() 
     keys = pygame.key.get_pressed()
+    SCANCODE_LEFT = 80
+    SCANCODE_RIGHT = 79
     if joystick and pygame.joystick.get_init() and joystick.get_init():
         # Joystick input
         if joystick.get_button(1):  # Move Left
             duck.move(-1)
         elif joystick.get_button(0):  # Move Right
+            duck.move(1)
+        else:
+            duck.stop()
+        # Jump is handled in the event loop when the button is pressed
+    else:
+        # Keyboard input using scancodes
+        if keys[SCANCODE_LEFT]:
+            duck.move(-1)
+        elif keys[SCANCODE_RIGHT]:
             duck.move(1)
         else:
             duck.stop()
