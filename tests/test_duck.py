@@ -15,6 +15,7 @@ from duck_game.settings import SCREEN_WIDTH, SCREEN_HEIGHT, GRAVITY, JUMP_FORCE
 @pytest.fixture(scope='module')
 def setup_pygame():
     pygame.init()
+    pygame.display.set_mode((800, 600))  # Use actual screen size or minimal size
     yield
     pygame.quit()
 

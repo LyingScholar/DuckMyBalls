@@ -1,11 +1,11 @@
 # main.py
 
 import pygame
-from .settings import *
-from .duck import Duck
-from .level import Level
-from .game_menu import Menu
-from .cutscene import Cutscene
+from settings import *
+from duck import Duck
+from level import Level
+from game_menu import Menu
+from cutscene import Cutscene
 
 def main():
     pygame.init()
