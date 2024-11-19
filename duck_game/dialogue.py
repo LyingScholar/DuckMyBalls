@@ -13,10 +13,14 @@ class Dialogue:
 
     def load_dialogue(self, csv_file):
         dialogue = []
-        with open(csv_file, 'r', encoding='utf-8') as file:
-            reader = csv.DictReader(file)
-            for row in reader:
-                dialogue.append(f"{row['character']}: {row['text']}")
+        try:
+            with open(csv_file, 'r', encoding='utf-8') as file:
+                reader = csv.DictReader(file)
+                for row in reader:
+                    dialogue.append(f"{row['character']}: {row['text']}")
+        except FileNotFoundError:
+            print(f"Dialogue file {csv_file} not found.")
+            self.is_active = False
         return dialogue
 
     def update(self):

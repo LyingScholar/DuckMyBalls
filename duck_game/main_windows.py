@@ -1,7 +1,7 @@
 # main_emulator.py
 
 import pygame
-from settings import *
+from .settings import *
 import main  # Import the original main module
 
 def emulate_joystick_events():

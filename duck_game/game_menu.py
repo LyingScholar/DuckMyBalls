@@ -2,7 +2,7 @@
 
 import pygame
 import os
-from settings import *
+from .settings import *
 
 class Menu:
     def __init__(self, joystick):

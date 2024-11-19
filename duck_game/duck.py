@@ -1,13 +1,13 @@
 # duck.py
 
 import pygame
-from settings import *
+from .resource_manager import ResourceManager
+from .settings import *
 
 class Duck(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        image = pygame.image.load(DUCK_IMAGE).convert_alpha()
-        self.image = pygame.transform.scale(image, (50, 50))
+        self.image = ResourceManager.load_image(DUCK_IMAGE, (50, 50))
         self.rect = self.image.get_rect(topleft=(x, y))
         self.vx = 0
         self.vy = 0
@@ -15,6 +15,7 @@ class Duck(pygame.sprite.Sprite):
         self.on_ground = False
         self.jump_pressed = False
 
+    
     def update(self, platforms):
         self.apply_gravity()
         self.move_horizontal()
@@ -46,10 +47,9 @@ class Duck(pygame.sprite.Sprite):
                 if self.vy > 0:
                     self.rect.bottom = platform.rect.top
                     self.on_ground = True
-                    self.vy = 0
                 elif self.vy < 0:
                     self.rect.top = platform.rect.bottom
-                    self.vy = 0
+                self.vy = 0
 
     def move(self, direction):
         self.vx = direction * self.speed

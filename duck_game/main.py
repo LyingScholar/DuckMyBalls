@@ -1,11 +1,11 @@
 # main.py
 
 import pygame
-from settings import *
-from duck import Duck
-from level import Level
-from game_menu import Menu
-from cutscene import Cutscene
+from .settings import *
+from .duck import Duck
+from .level import Level
+from .game_menu import Menu
+from .cutscene import Cutscene
 
 def main():
     pygame.init()
@@ -19,8 +19,8 @@ def main():
         joystick.init()
         print(f"Joystick detected: {joystick.get_name()}")
     else:
-        print("No joystick detected.")
-        return  # Exit case
+        print("No joystick detected. Using keyboard input.")
+        joystick = None
 
     pygame.mixer.music.load(MENU_MUSIC)
     pygame.mixer.music.set_volume(1.0)
@@ -231,5 +231,29 @@ def end_screen(screen):
                 running = False
         clock.tick(FPS)
 
+def handle_input(duck, joystick):
+    keys = pygame.key.get_pressed()
+    if joystick:
+        # Joystick input
+        if joystick.get_button(1):  # Move Left
+            duck.move(-1)
+        elif joystick.get_button(0):  # Move Right
+            duck.move(1)
+        else:
+            duck.stop()
+        if joystick.get_button(5):  # Jump
+            duck.jump()
+    else:
+        # Keyboard input
+        if keys[pygame.K_LEFT]:
+            duck.move(-1)
+        elif keys[pygame.K_RIGHT]:
+            duck.move(1)
+        else:
+            duck.stop()
+        if keys[pygame.K_SPACE]:
+            duck.jump()
+
+            
 if __name__ == "__main__":
     main()
