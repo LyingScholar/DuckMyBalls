@@ -17,6 +17,9 @@ class Duck(pygame.sprite.Sprite):
         super().__init__()
         self.image = ResourceManager.load_image(DUCK_IMAGE, (50, 50))
         self.rect = self.image.get_rect(topleft=(x, y))
+        self.mask = pygame.mask.from_surface(self.image)
+        print("Duck mask count:", self.mask.count())
+        
         self.vx = 0
         self.vy = 0
         self.speed = 5
@@ -60,19 +63,25 @@ class Duck(pygame.sprite.Sprite):
             platforms (pygame.sprite.Group): The group of platform sprites.
             direction (str): The direction of movement ('horizontal' or 'vertical').
         """
-        collisions = pygame.sprite.spritecollide(self, platforms, False)
+        # rect_collisions = pygame.sprite.spritecollide(self, platforms, False)
+        # collisions = pygame.sprite.spritecollide(self, platforms, False, pygame.sprite.collide_mask)
+        collisions = pygame.sprite.spritecollide(self, platforms, False, pygame.sprite.collide_mask)
+        if collisions:
+            print(f"Collision detected in {direction} direction with {len(collisions)} platform(s)")
+        else:
+            print(f"No collision detected in {direction} direction")
         for platform in collisions:
             if direction == 'horizontal':
-                if self.vx > 0:
+                if self.vx > 0:  # Moving right
                     self.rect.right = platform.rect.left
-                elif self.vx < 0:
+                elif self.vx < 0:  # Moving left
                     self.rect.left = platform.rect.right
                 self.vx = 0
             elif direction == 'vertical':
-                if self.vy > 0:
+                if self.vy > 0:  # Falling down
                     self.rect.bottom = platform.rect.top
                     self.on_ground = True
-                elif self.vy < 0:
+                elif self.vy < 0:  # Moving up
                     self.rect.top = platform.rect.bottom
                 self.vy = 0
 
@@ -102,3 +111,7 @@ class Duck(pygame.sprite.Sprite):
             camera_x (int): The horizontal camera offset.
         """
         screen.blit(self.image, (self.rect.x - camera_x, self.rect.y))
+
+    def update_image(self, new_image):
+        self.image = new_image
+        self.mask = pygame.mask.from_surface(self.image)

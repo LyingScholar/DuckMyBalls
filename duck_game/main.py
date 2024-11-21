@@ -1,4 +1,7 @@
 # main.py
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import pygame
 from duck_game.settings import *
@@ -112,7 +115,6 @@ def play_level(screen, duck, level, clock, joystick):
             return True
     return False
 
-
 def handle_input(duck, joystick):
     pygame.event.pump() 
     keys = pygame.key.get_pressed()
@@ -136,7 +138,7 @@ def handle_input(duck, joystick):
         else:
             duck.stop()
         # Jump is handled in the event loop when the button is pressed
-    else:
+    # else:
         # keycode_left = pygame.K_LEFT
         # keycode_right = pygame.K_RIGHT
         # scancode_left = pygame.key.get_scancode_from_key(keycode_left)
@@ -150,12 +152,12 @@ def handle_input(duck, joystick):
         #         duck.stop()
         # else:
         #     duck.stop()
-        if keys[pygame.K_LEFT]:
-            duck.move(-1)
-        elif keys[pygame.K_RIGHT]:
-            duck.move(1)
-        else:
-            duck.stop()
+        # if keys[pygame.K_LEFT]:
+        #     duck.move(-1)
+        # elif keys[pygame.K_RIGHT]:
+        #     duck.move(1)
+        # else:
+        #     duck.stop()
         # Jump is handled in the event loop when the key is pressed
 
 def create_level(index):
