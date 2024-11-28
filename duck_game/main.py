@@ -152,12 +152,12 @@ def handle_input(duck, joystick):
         #         duck.stop()
         # else:
         #     duck.stop()
-        # if keys[pygame.K_LEFT]:
-        #     duck.move(-1)
-        # elif keys[pygame.K_RIGHT]:
-        #     duck.move(1)
-        # else:
-        #     duck.stop()
+        if keys[pygame.K_LEFT]:
+            duck.move(-1)
+        elif keys[pygame.K_RIGHT]:
+            duck.move(1)
+        else:
+            duck.stop()
         # Jump is handled in the event loop when the key is pressed
 
 def create_level(index):

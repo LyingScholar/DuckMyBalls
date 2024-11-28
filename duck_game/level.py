@@ -37,6 +37,7 @@ class Level:
         ground_width = self.calculate_level_width()
         ground_height = SCREEN_HEIGHT - self.ground_level
         ground_image = pygame.Surface((int(ground_width), int(ground_height)), pygame.SRCALPHA)
+        ground_image.fill((0, 0, 0))
         ground = Platform(
             x=0,
             y=self.ground_level,
