@@ -13,7 +13,11 @@ class ResourceManager:
             return image
         key = (path, size)
         if key not in cls._images:
-            image = pygame.image.load(path).convert_alpha()
+            try:
+                image = pygame.image.load(path).convert_alpha()  # Use convert_alpha()
+            except pygame.error as e:
+                print(f"Error loading image {path}: {e}")
+                raise
             if size:
                 image = pygame.transform.scale(image, size)
             cls._images[key] = image

@@ -11,6 +11,11 @@ class Platform(pygame.sprite.Sprite):
             img = pygame.image.load(image).convert_alpha()
             self.image = pygame.transform.scale(img, (int(width), int(height)))
         self.rect = self.image.get_rect(topleft=(x, y))
+        
+        self.mask = pygame.mask.from_surface(self.image)
+        print(f"Platform at ({x}, {y}) mask count:", self.mask.count())
+        
+        
         self.moving = moving
         self.move_range = move_range
         self.speed = speed
