@@ -82,3 +82,16 @@ def test_duck_right_boundary(duck):
     duck.update(pygame.sprite.Group(), level_width=level_width)
     assert duck.rect.x <= level_width - duck.rect.width
 
+class Character:
+    __slots__ = ["name","__family", "side"]
+    def __init__(self, name, family, side):
+        self.name = name
+        self.__family = family
+        self.side = side
+
+Caitlyn = Character("Caitlyn", "Kiramman", "Inquisitors")
+Vi = Character("Vi", "Vandar", "Zaun")
+Caitlyn.meet(Vi)
+print(Caitlyn.side) = "Zaun"
+
+
